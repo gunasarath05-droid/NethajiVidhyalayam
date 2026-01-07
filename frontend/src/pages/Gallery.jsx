@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, ZoomIn, Info } from 'lucide-react';
+import { FaCamera, FaSearchPlus, FaInfoCircle } from 'react-icons/fa';
 import api from '../api/axios';
+import { API_BASE_URL } from '../api/config';
 
 const Gallery = () => {
     const [images, setImages] = useState([]);
@@ -9,34 +10,23 @@ const Gallery = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const [eventsRes, achievementsRes] = await Promise.all([
-                    api.get('/gallery/events/'),
-                    api.get('/gallery/achievements/')
-                ]);
+                const response = await api.get('/gallery/items/');
 
-                const formattedEvents = eventsRes.data.map(item => ({
-                    id: `evt-${item.id}`,
-                    url: item.image,
+                const formattedImages = response.data.map(item => ({
+                    id: item.id,
+                    url: item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`) : null,
                     title: item.title,
-                    category: 'Events',
-                    description: item.description
+                    category: item.category,
+                    description: item.description || ''
                 }));
 
-                const formattedAchievements = achievementsRes.data.map(item => ({
-                    id: `ach-${item.id}`,
-                    url: item.image,
-                    title: item.title,
-                    category: 'Achievements',
-                    description: `Achievement from year ${item.year}`
-                }));
-
-                const allImages = [...formattedEvents, ...formattedAchievements];
-                setImages(allImages);
-                if (allImages.length > 0) {
-                    setSelectedImage(allImages[0]);
+                setImages(formattedImages);
+                if (formattedImages.length > 0) {
+                    setSelectedImage(formattedImages[0]);
                 }
             } catch (error) {
                 console.error("Failed to fetch gallery data", error);
@@ -130,17 +120,10 @@ const Gallery = () => {
                                 </h2>
 
                                 <div className="flex items-start space-x-4 mb-8">
-                                    <Info className="w-6 h-6 text-gray-400 mt-1 flex-shrink-0" />
+                                    <FaInfoCircle className="w-6 h-6 text-gray-400 mt-1 flex-shrink-0" />
                                     <p className="text-gray-600 text-lg leading-relaxed">
                                         {selectedImage?.description}
                                     </p>
-                                </div>
-
-                                <div className="border-t border-gray-100 pt-6 mt-auto">
-                                    <div className="flex items-center text-sm text-gray-400">
-                                        <Camera className="w-4 h-4 mr-2" />
-                                        <span>Photo Gallery Showcase</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +161,7 @@ const Gallery = () => {
                             {/* Selected Indicator Icon */}
                             {selectedImage && selectedImage.id === image.id && (
                                 <div className="absolute top-3 right-3 bg-white/90 text-[var(--color-primary)] p-2 rounded-full shadow-lg">
-                                    <ZoomIn size={18} />
+                                    <FaSearchPlus size={18} />
                                 </div>
                             )}
                         </div>

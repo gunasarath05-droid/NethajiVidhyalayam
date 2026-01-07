@@ -1,25 +1,28 @@
-import React from 'react';
-import { BookOpen, Heart, Palette, Music, Users, CheckCircle } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { FaBookOpen, FaHeart, FaPalette, FaMusic, FaUsers, FaCheckCircle } from 'react-icons/fa';
 
 const Nursery = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const keyFeatures = [
         {
-            icon: <Heart size={32} />,
+            icon: <FaHeart size={32} />,
             title: "Play-Based Learning",
             desc: "Learning through play helps children develop social, cognitive, and emotional skills."
         },
         {
-            icon: <Palette size={32} />,
+            icon: <FaPalette size={32} />,
             title: "Creative Expression",
             desc: "Art, craft, and music activities to encourage creativity and self-expression."
         },
         {
-            icon: <Users size={32} />,
+            icon: <FaUsers size={32} />,
             title: "Small Class Sizes",
             desc: "Maximum 20 children per class with 2 dedicated teachers for personalized attention."
         },
         {
-            icon: <BookOpen size={32} />,
+            icon: <FaBookOpen size={32} />,
             title: "Montessori Approach",
             desc: "Child-centered learning environment that encourages independence and exploration."
         }
@@ -136,15 +139,15 @@ const Nursery = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                         {[
-                            "Language & Literacy (Phonics, Storytelling)",
+                            "Language & Literacy",
                             "Numeracy & Math Readiness",
-                            "Science & Nature Exploration",
-                            "Social & Emotional Development",
-                            "Fine & Gross Motor Skills",
-                            "Music, Dance & Movement"
+                            "Moral Values & Good Habits",
+                            "Music, Dance & Rhymes",
+                            "Celebration of Festivals & Special Days",
+                            "Play-based and Activity-based Learning"
                         ].map((area, index) => (
                             <div key={index} className="flex items-start gap-3 bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                                <CheckCircle size={20} className="text-primary mt-1 shrink-0" />
+                                <FaCheckCircle size={20} className="text-primary mt-1 shrink-0" />
                                 <span>{area}</span>
                             </div>
                         ))}

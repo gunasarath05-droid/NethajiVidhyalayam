@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { User, Lock, Eye, EyeOff, Mail, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FaUser, FaLock, FaEye, FaEyeSlash, FaEnvelope, FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
@@ -85,7 +88,7 @@ const Login = () => {
                             <label className="block text-gray-700 font-bold mb-2">Email Address</label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <Mail size={20} />
+                                    <FaEnvelope size={20} />
                                 </div>
                                 <input
                                     type="email"
@@ -104,7 +107,7 @@ const Login = () => {
                             <label className="block text-gray-700 font-bold mb-2">Password</label>
                             <div className="relative">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <Lock size={20} />
+                                    <FaLock size={20} />
                                 </div>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
@@ -120,7 +123,7 @@ const Login = () => {
                                     onClick={() => setShowPassword(!showPassword)}
                                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                 >
-                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                                 </button>
                             </div>
                         </div>
@@ -141,7 +144,7 @@ const Login = () => {
                             type="submit"
                             className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary text-white font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg"
                         >
-                            Login <ArrowRight size={20} />
+                            Login <FaArrowRight size={20} />
                         </button>
                     </form>
 

@@ -46,3 +46,20 @@ class Department(models.Model):
         ordering = ['order']
         verbose_name = "Department"
         verbose_name_plural = "Departments"
+
+class FacultyMember(models.Model):
+    name = models.CharField(max_length=200)
+    role = models.CharField(max_length=200, verbose_name="Designation")
+    qualification = models.CharField(max_length=255)
+    department = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='faculty/members/', blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.role}"
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Faculty Member"
+        verbose_name_plural = "Faculty Members"

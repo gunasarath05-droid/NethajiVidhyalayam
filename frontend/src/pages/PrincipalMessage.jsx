@@ -1,7 +1,11 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { FaArrowRight } from 'react-icons/fa';
+import principalImage from '../images/princi.jpg';
 
 const PrincipalMessage = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <div className="font-sans">
             {/* Hero Section */}
@@ -46,16 +50,16 @@ const PrincipalMessage = () => {
                 <div className="container mx-auto px-4 max-w-5xl">
                     <div className="flex flex-col lg:flex-row gap-12 items-start">
                         {/* Image Column */}
-                        <div className="lg:w-1/3 flex flex-col items-center">
+                        <div className="lg:w-1/3 w-full flex flex-col items-center">
                             <div className="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-primary mb-6">
                                 <img
-                                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                                    alt="Principal Dr. R. Vijay Kumar"
+                                    src={principalImage}
+                                    alt="Principal Dr.K. PRAMILA"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
                             <div className="text-center">
-                                <h3 className="text-xl font-bold text-secondary">Dr. R. Vijay Kumar</h3>
+                                <h3 className="text-xl font-bold text-secondary">Dr.K. PRAMILA</h3>
                                 <p className="text-primary font-bold">Principal</p>
                             </div>
                         </div>
@@ -99,7 +103,7 @@ const PrincipalMessage = () => {
 
                             <div className="mt-10">
                                 <a href="/contact" className="inline-flex items-center bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
-                                    Contact Us <ArrowRight size={20} className="ml-2" />
+                                    Contact Us <FaArrowRight size={20} className="ml-2" />
                                 </a>
                             </div>
                         </div>

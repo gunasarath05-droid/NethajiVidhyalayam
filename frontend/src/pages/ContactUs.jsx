@@ -1,52 +1,77 @@
-import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, User, MessageSquare, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock, FaPaperPlane, FaUser, FaComment, FaArrowRight } from 'react-icons/fa';
+
+import { API_BASE_URL } from '../api/config';
 
 const ContactUs = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
-        subject: '',
+        subject: 'general',
         message: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        alert('Thank you! We will get back to you soon.');
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        setIsSubmitting(true);
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/contact/messages/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                alert('Thank you! We will get back to you soon.');
+                setFormData({ name: '', email: '', phone: '', subject: 'general', message: '' });
+            } else {
+                alert('Something went wrong. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('Connection error. Please check your internet.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const contactMethods = [
         {
-            icon: <Phone size={32} />,
+            icon: <FaPhoneAlt size={32} />,
             title: "Call Us Directly",
-            primary: "+91 98765 43210",
+            primary: "+91 9445602389",
             secondary: "Mon-Fri, 8 AM - 4 PM",
             action: "Call Now",
-            link: "tel:+919876543210",
+            link: "tel:+919445602389",
             gradient: "from-green-400 to-green-600"
         },
         {
-            icon: <Mail size={32} />,
+            icon: <FaEnvelope size={32} />,
             title: "Send an Email",
-            primary: "info@nethajividhyalayam.edu.in",
+            primary: "netajividhyalayamschool@gmail.com",
             secondary: "24-hour response time",
             action: "Email Us",
-            link: "mailto:info@nethajividhyalayam.edu.in",
+            link: "mailto:netajividhyalayamschool@gmail.com",
             gradient: "from-blue-400 to-blue-600"
         },
         {
-            icon: <MapPin size={32} />,
+            icon: <FaMapMarkerAlt size={32} />,
             title: "Visit Campus",
-            primary: "123, Education Street, Anna Nagar",
-            secondary: "Chennai - 600040",
+            primary: "10, 1st Main Rd, Babu Nagar",
+            secondary: "Medavakkam, Chennai - 600100",
             action: "Get Directions",
-            link: "#map",
+            link: "https://www.google.com/maps/dir/?api=1&destination=Nethaji+Vidyalayam,+10,+1st+Main+Rd,+Babu+Nagar,+Munusamy+Nagar,+Vimala+Nagar,+Medavakkam,+Chennai,+Tamil+Nadu+600100",
             gradient: "from-purple-400 to-purple-600"
         }
     ];
@@ -81,13 +106,15 @@ const ContactUs = () => {
                                     <h3 className="text-xl font-bold">{method.title}</h3>
                                 </div>
                                 <div className="p-8 text-center">
-                                    <p className="font-bold text-gray-900 mb-1">{method.primary}</p>
+                                    <a href={method.link} className="block font-bold text-gray-900 mb-1 hover:text-primary transition-colors">
+                                        {method.primary}
+                                    </a>
                                     <p className="text-gray-500 text-sm mb-6">{method.secondary}</p>
                                     <a
                                         href={method.link}
                                         className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary-hover transition-colors"
                                     >
-                                        {method.action} <ArrowRight size={16} />
+                                        {method.action} <FaArrowRight size={16} />
                                     </a>
                                 </div>
                             </div>
@@ -100,7 +127,7 @@ const ContactUs = () => {
             <section className="py-20 bg-white">
                 <div className="container mx-auto px-4 max-w-3xl">
                     <div className="text-center mb-12">
-                        <MessageSquare className="mx-auto mb-4 text-primary" size={48} />
+                        <FaComment className="mx-auto mb-4 text-primary" size={48} />
                         <h2 className="text-4xl font-bold text-secondary mb-4">Send Us a Message</h2>
                         <p className="text-gray-600 text-lg">Fill out the form and our team will respond within 24 hours.</p>
                     </div>
@@ -109,7 +136,7 @@ const ContactUs = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label className="block text-gray-700 font-bold mb-3 flex items-center gap-2">
-                                    <User size={18} className="text-primary" /> Full Name *
+                                    <FaUser size={18} className="text-primary" /> Full Name *
                                 </label>
                                 <input
                                     type="text"
@@ -123,7 +150,7 @@ const ContactUs = () => {
                             </div>
                             <div>
                                 <label className="block text-gray-700 font-bold mb-3 flex items-center gap-2">
-                                    <Mail size={18} className="text-primary" /> Email Address *
+                                    <FaEnvelope size={18} className="text-primary" /> Email Address *
                                 </label>
                                 <input
                                     type="email"
@@ -140,7 +167,7 @@ const ContactUs = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label className="block text-gray-700 font-bold mb-3 flex items-center gap-2">
-                                    <Phone size={18} className="text-primary" /> Phone Number
+                                    <FaPhoneAlt size={18} className="text-primary" /> Phone Number
                                 </label>
                                 <input
                                     type="tel"
@@ -171,7 +198,7 @@ const ContactUs = () => {
 
                         <div className="mb-8">
                             <label className="block text-gray-700 font-bold mb-3 flex items-center gap-2">
-                                <MessageSquare size={18} className="text-primary" /> Your Message *
+                                <FaComment size={18} className="text-primary" /> Your Message *
                             </label>
                             <textarea
                                 name="message"
@@ -186,9 +213,10 @@ const ContactUs = () => {
 
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary text-white font-bold py-5 rounded-xl transition-all flex items-center justify-center gap-3 shadow-2xl hover:shadow-primary/50 text-lg"
+                            disabled={isSubmitting}
+                            className={`w-full bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary text-white font-bold py-5 rounded-xl transition-all flex items-center justify-center gap-3 shadow-2xl hover:shadow-primary/50 text-lg ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
-                            <Send size={22} /> Send Message
+                            {isSubmitting ? 'Sending...' : <><FaPaperPlane size={22} /> Send Message</>}
                         </button>
                     </form>
                 </div>
@@ -197,26 +225,32 @@ const ContactUs = () => {
             {/* Map with Overlay */}
             <section id="map" className="relative h-[600px] bg-gray-900">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.267791695244!2d80.20929631482173!3d13.084621990778934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sAnna%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1234567890123"
+                    src="https://maps.google.com/maps?q=Nethaji%20Vidyalayam,%2010,%201st%20Main%20Rd,%20Babu%20Nagar,%20Chennai&t=&z=15&ie=UTF8&iwloc=&output=embed"
                     width="100%"
                     height="100%"
                     style={{ border: 0, filter: 'grayscale(30%)' }}
                     allowFullScreen=""
                     loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
                     title="School Location"
                 ></iframe>
 
                 {/* Centered Info Card */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-lg pointer-events-auto">
-                        <MapPin className="mx-auto mb-4 text-primary" size={48} />
+                        <FaMapMarkerAlt className="mx-auto mb-4 text-primary" size={48} />
                         <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">Visit Our Campus</h3>
                         <p className="text-gray-600 mb-2 text-center"><strong>Nethaji Vidyalayam</strong></p>
-                        <p className="text-gray-600 mb-6 text-center">123, Education Street, Anna Nagar<br />Chennai - 600040, Tamil Nadu</p>
+                        <p className="text-gray-600 mb-6 text-center">10, 1st Main Rd, Babu Nagar, Medavakkam<br />Chennai - 600100, Tamil Nadu</p>
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="flex-1 bg-primary hover:bg-primary-hover text-white font-bold py-3 px-6 rounded-xl transition-all">
+                            <a
+                                href="https://www.google.com/maps/dir/?api=1&destination=Nethaji+Vidyalayam,+10,+1st+Main+Rd,+Babu+Nagar,+Munusamy+Nagar,+Vimala+Nagar,+Medavakkam,+Chennai,+Tamil+Nadu+600100"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex-1 bg-primary hover:bg-primary-hover text-white font-bold py-3 px-6 rounded-xl transition-all text-center"
+                            >
                                 Get Directions
-                            </button>
+                            </a>
                             <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-xl transition-all">
                                 Schedule Visit
                             </button>
@@ -230,7 +264,7 @@ const ContactUs = () => {
                 <div className="container mx-auto px-4 max-w-4xl">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                         <div>
-                            <Clock className="mb-4" size={48} />
+                            <FaClock className="mb-4" size={48} />
                             <h3 className="text-3xl font-bold mb-2">We're Open!</h3>
                             <p className="text-gray-300">Visit us during office hours or call for appointments.</p>
                         </div>

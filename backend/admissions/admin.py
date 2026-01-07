@@ -1,15 +1,10 @@
 from django.contrib import admin
-from .models import (AdmissionsPageContent, AdmissionStep, AgeCriterion, 
-                    RequiredDocument, AdmissionsFAQ, AdmissionInquiry)
+from .models import (AdmissionsPageContent, AgeCriterion, 
+                    RequiredDocument, AdmissionInquiry)
 
 @admin.register(AdmissionsPageContent)
 class AdmissionsPageContentAdmin(admin.ModelAdmin):
     list_display = ('hero_title', 'updated_at')
-
-@admin.register(AdmissionStep)
-class AdmissionStepAdmin(admin.ModelAdmin):
-    list_display = ('title', 'order', 'is_active')
-    list_editable = ('order', 'is_active')
 
 @admin.register(AgeCriterion)
 class AgeCriterionAdmin(admin.ModelAdmin):
@@ -19,11 +14,6 @@ class AgeCriterionAdmin(admin.ModelAdmin):
 @admin.register(RequiredDocument)
 class RequiredDocumentAdmin(admin.ModelAdmin):
     list_display = ('text', 'order', 'is_active')
-    list_editable = ('order', 'is_active')
-
-@admin.register(AdmissionsFAQ)
-class AdmissionsFAQAdmin(admin.ModelAdmin):
-    list_display = ('question', 'order', 'is_active')
     list_editable = ('order', 'is_active')
 
 @admin.register(AdmissionInquiry)

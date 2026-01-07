@@ -1,11 +1,7 @@
 from rest_framework import viewsets
-from .models import Event, Achievement
-from .serializers import EventSerializer, AchievementSerializer
+from .models import GalleryItem
+from .serializers import GalleryItemSerializer
 
-class EventViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Event.objects.filter(is_active=True).order_by('-date')
-    serializer_class = EventSerializer
-
-class AchievementViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Achievement.objects.filter(is_active=True).order_by('-created_at')
-    serializer_class = AchievementSerializer
+class GalleryItemViewSet(viewsets.ModelViewSet):
+    queryset = GalleryItem.objects.filter(is_active=True)
+    serializer_class = GalleryItemSerializer

@@ -1,7 +1,10 @@
-import React from 'react';
-import { Check, Download, Info } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { FaCheck, FaDownload, FaInfoCircle } from 'react-icons/fa';
 
 const FeeStructure = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const feeTiers = [
         {
             title: "Kindergarten",
@@ -89,7 +92,7 @@ const FeeStructure = () => {
                                     <ul className="space-y-4">
                                         {tier.features.map((feature, idx) => (
                                             <li key={idx} className="flex items-start text-sm text-gray-600">
-                                                <Check size={16} className={`mr-2 mt-0.5 ${tier.color.replace('border-', 'text-')}`} />
+                                                <FaCheck size={16} className={`mr-2 mt-0.5 ${tier.color.replace('border-', 'text-')}`} />
                                                 {feature}
                                             </li>
                                         ))}
@@ -111,7 +114,7 @@ const FeeStructure = () => {
                 <div className="container mx-auto px-4 max-w-4xl">
                     <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row items-center gap-6">
                         <div className="p-4 bg-blue-50 rounded-full text-blue-600">
-                            <Info size={32} />
+                            <FaInfoCircle size={32} />
                         </div>
                         <div className="flex-1">
                             <h3 className="text-xl font-bold text-gray-800 mb-2">One-Time Admission Fee</h3>
@@ -120,7 +123,7 @@ const FeeStructure = () => {
                             </p>
                         </div>
                         <button className="flex items-center gap-2 text-primary font-bold hover:underline">
-                            <Download size={20} /> Download PDF
+                            <FaDownload size={20} /> Download PDF
                         </button>
                     </div>
                 </div>

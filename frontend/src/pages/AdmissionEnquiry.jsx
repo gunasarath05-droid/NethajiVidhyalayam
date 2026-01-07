@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { PenTool, User, Calendar, Phone, MapPin, Briefcase, School, Loader2, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { FaPen, FaUser, FaCalendarAlt, FaPhoneAlt, FaMapMarkerAlt, FaBriefcase, FaSchool, FaSpinner, FaCheckCircle, FaBookOpen } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../api/config';
 
 const AdmissionEnquiry = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [formData, setFormData] = useState({
         student_name: '',
+        gender: '',
         class_applied: '',
         date_of_birth: '',
         age_completed: '',
@@ -18,7 +23,8 @@ const AdmissionEnquiry = () => {
         mother_contact: '',
         address: '',
         has_previous_schooling: false,
-        previous_school_name: ''
+        previous_school_name: '',
+        previous_class: ''
     });
 
     const handleChange = (e) => {
@@ -33,7 +39,8 @@ const AdmissionEnquiry = () => {
         setFormData(prev => ({
             ...prev,
             has_previous_schooling: val,
-            previous_school_name: val ? prev.previous_school_name : ''
+            previous_school_name: val ? prev.previous_school_name : '',
+            previous_class: val ? prev.previous_class : ''
         }));
     };
 
@@ -53,6 +60,7 @@ const AdmissionEnquiry = () => {
                 setIsSuccess(true);
                 setFormData({
                     student_name: '',
+                    gender: '',
                     class_applied: '',
                     date_of_birth: '',
                     age_completed: '',
@@ -64,7 +72,8 @@ const AdmissionEnquiry = () => {
                     mother_contact: '',
                     address: '',
                     has_previous_schooling: false,
-                    previous_school_name: ''
+                    previous_school_name: '',
+                    previous_class: ''
                 });
             } else {
                 alert("Something went wrong. Please try again.");
@@ -82,7 +91,7 @@ const AdmissionEnquiry = () => {
             <div className="font-sans bg-gray-50 min-h-screen flex items-center justify-center px-4">
                 <div className="bg-white p-12 rounded-3xl shadow-2xl text-center max-w-lg w-full transform transition-all animate-fade-in-up">
                     <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
-                        <CheckCircle2 size={64} />
+                        <FaCheckCircle size={64} />
                     </div>
                     <h2 className="text-4xl font-bold text-secondary mb-4">Application Sent!</h2>
                     <p className="text-gray-600 text-lg mb-8 leading-relaxed">
@@ -116,7 +125,7 @@ const AdmissionEnquiry = () => {
                 <div className="container mx-auto px-4 max-w-4xl">
                     <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border-t-8 border-secondary">
                         <div className="flex items-center gap-3 mb-8 text-secondary">
-                            <PenTool size={32} />
+                            <FaPen size={32} />
                             <h2 className="text-3xl font-bold text-primary">Admission Application Form</h2>
                         </div>
 
@@ -124,7 +133,7 @@ const AdmissionEnquiry = () => {
                             {/* Student Details */}
                             <div className="space-y-6">
                                 <h3 className="text-xl font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
-                                    <User size={20} className="text-primary" /> Student Details
+                                    <FaUser size={20} className="text-primary" /> Student Details
                                 </h3>
 
                                 <div>
@@ -141,6 +150,25 @@ const AdmissionEnquiry = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-gray-700 font-semibold mb-2">Gender <span className="text-red-500">*</span></label>
+                                        <div className="flex gap-6 py-2">
+                                            {['Male', 'Female', 'Other'].map((option) => (
+                                                <label key={option} className="flex items-center gap-2 cursor-pointer group">
+                                                    <input
+                                                        type="radio"
+                                                        name="gender"
+                                                        value={option}
+                                                        checked={formData.gender === option}
+                                                        onChange={handleChange}
+                                                        required
+                                                        className="w-5 h-5 text-secondary focus:ring-secondary border-gray-300"
+                                                    />
+                                                    <span className="text-gray-700 group-hover:text-secondary transition-colors">{option}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
                                     <div>
                                         <label className="block text-gray-700 font-semibold mb-2">Class Applied for</label>
                                         <select
@@ -162,7 +190,7 @@ const AdmissionEnquiry = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Date of Birth (DOB)</label>
+                                        <label className="block text-gray-700 font-semibold mb-2">Date of Birth (DOB) <span className="text-red-500">*</span></label>
                                         <input
                                             type="date"
                                             name="date_of_birth"
@@ -191,7 +219,7 @@ const AdmissionEnquiry = () => {
                             {/* Parent Details */}
                             <div className="space-y-6">
                                 <h3 className="text-xl font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
-                                    <User size={20} className="text-primary" /> Parent Details
+                                    <FaUser size={20} className="text-primary" /> Parent Details
                                 </h3>
 
                                 {/* Father's Info */}
@@ -223,9 +251,9 @@ const AdmissionEnquiry = () => {
                                             />
                                         </div>
                                         <div className="md:col-span-2">
-                                            <label className="block text-gray-700 font-semibold mb-2">Contact Number</label>
+                                            <label className="block text-gray-700 font-semibold mb-2">Contact Number <span className="text-red-500">*</span></label>
                                             <div className="relative">
-                                                <Phone className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                <FaPhoneAlt className="absolute left-3 top-3.5 text-gray-400" size={18} />
                                                 <input
                                                     type="tel"
                                                     name="father_contact"
@@ -271,7 +299,7 @@ const AdmissionEnquiry = () => {
                                         <div className="md:col-span-2">
                                             <label className="block text-gray-700 font-semibold mb-2">Contact Number</label>
                                             <div className="relative">
-                                                <Phone className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                <FaPhoneAlt className="absolute left-3 top-3.5 text-gray-400" size={18} />
                                                 <input
                                                     type="tel"
                                                     name="mother_contact"
@@ -290,7 +318,7 @@ const AdmissionEnquiry = () => {
                             {/* Additional Details */}
                             <div className="space-y-6">
                                 <h3 className="text-xl font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
-                                    <MapPin size={20} className="text-primary" /> Additional Details
+                                    <FaMapMarkerAlt size={20} className="text-primary" /> Additional Details
                                 </h3>
 
                                 <div>
@@ -332,19 +360,38 @@ const AdmissionEnquiry = () => {
                                     </div>
 
                                     {formData.has_previous_schooling && (
-                                        <div className="animate-fade-in-down">
-                                            <label className="block text-gray-700 font-semibold mb-2">Name of the School</label>
-                                            <div className="relative">
-                                                <School className="absolute left-3 top-3.5 text-gray-400" size={18} />
-                                                <input
-                                                    type="text"
-                                                    name="previous_school_name"
-                                                    required={formData.has_previous_schooling}
-                                                    value={formData.previous_school_name}
-                                                    onChange={handleChange}
-                                                    className="w-full pl-10 px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
-                                                    placeholder="Enter previous school name"
-                                                />
+                                        <div className="animate-fade-in-down space-y-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="block text-gray-700 font-semibold mb-2">Name of the School <span className="text-red-500">*</span></label>
+                                                    <div className="relative">
+                                                        <FaSchool className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                        <input
+                                                            type="text"
+                                                            name="previous_school_name"
+                                                            required={formData.has_previous_schooling}
+                                                            value={formData.previous_school_name}
+                                                            onChange={handleChange}
+                                                            className="w-full pl-10 px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                                            placeholder="Enter previous school name"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-gray-700 font-semibold mb-2">Previous Class <span className="text-red-500">*</span></label>
+                                                    <div className="relative">
+                                                        <FaBookOpen className="absolute left-3 top-3.5 text-gray-400" size={18} />
+                                                        <input
+                                                            type="text"
+                                                            name="previous_class"
+                                                            required={formData.has_previous_schooling}
+                                                            value={formData.previous_class}
+                                                            onChange={handleChange}
+                                                            className="w-full pl-10 px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all"
+                                                            placeholder="Enter previous class"
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -358,7 +405,7 @@ const AdmissionEnquiry = () => {
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <Loader2 className="animate-spin" size={24} /> Processing...
+                                        <FaSpinner className="animate-spin" size={24} /> Processing...
                                     </>
                                 ) : (
                                     "Submit Enquiry"

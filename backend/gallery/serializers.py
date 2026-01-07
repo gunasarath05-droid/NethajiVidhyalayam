@@ -1,12 +1,7 @@
 from rest_framework import serializers
-from .models import Event, Achievement
+from .models import GalleryItem
 
-class EventSerializer(serializers.ModelSerializer):
+class GalleryItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Event
-        fields = '__all__'
-
-class AchievementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Achievement
+        model = GalleryItem
         fields = '__all__'

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  ClipboardCheck,
-  Calendar,
-  FileText,
-  Users,
-  CheckCircle,
-  ArrowRight,
-  HelpCircle,
-  Download,
-} from "lucide-react";
+  FaClipboardCheck,
+  FaCalendarAlt,
+  FaFileAlt,
+  FaUsers,
+  FaCheckCircle,
+  FaArrowRight,
+  FaQuestionCircle,
+  FaDownload,
+} from "react-icons/fa";
 import { API_BASE_URL } from "../api/config";
 
 const AdmissionsOverview = () => {
@@ -20,13 +20,14 @@ const AdmissionsOverview = () => {
   const [faqs, setFaqs] = useState([]);
 
   const iconMap = {
-    ClipboardCheck: <ClipboardCheck size={32} />,
-    FileText: <FileText size={32} />,
-    Users: <Users size={32} />,
-    CheckCircle: <CheckCircle size={32} />,
+    ClipboardCheck: <FaClipboardCheck size={32} />,
+    FileText: <FaFileAlt size={32} />,
+    Users: <FaUsers size={32} />,
+    CheckCircle: <FaCheckCircle size={32} />,
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchData = async () => {
       try {
         const [contentRes, stepsRes, criteriaRes, docsRes, faqsRes] = await Promise.all([
@@ -82,7 +83,7 @@ const AdmissionsOverview = () => {
                 {pageContent?.why_heading || "Nurturing Potential, Shaping Futures"}
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                {pageContent?.why_description || "At our school, we are committed to providing a nurturing and stimulating learning environment that supports the holistic development of every child."}
+                {pageContent?.why_description || "At our school, we are committed to providing a nurturing and stimulating learning environment that supports the holistic development of every child. We combine strong academic foundations with values, creativity, and modern learning tools to prepare students for a bright future."}
               </p>
               <div className="flex gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-primary">
@@ -135,7 +136,7 @@ const AdmissionsOverview = () => {
               >
                 <div className="absolute top-0 right-0 bg-primary/10 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-primary/20"></div>
                 <div className="text-primary mb-6 relative z-10">
-                  {iconMap[step.icon_name] || <ClipboardCheck size={32} />}
+                  {iconMap[step.icon_name] || <FaClipboardCheck size={32} />}
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
                   {step.title}
@@ -156,7 +157,7 @@ const AdmissionsOverview = () => {
             {/* Age Criteria */}
             <div>
               <h3 className="text-2xl font-bold text-secondary mb-6 flex items-center">
-                <Calendar className="mr-3 text-primary" /> Age Criteria (as of
+                <FaCalendarAlt className="mr-3 text-primary" /> Age Criteria (as of
                 March 31st)
               </h3>
               <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
@@ -193,7 +194,7 @@ const AdmissionsOverview = () => {
             {/* Documents Required */}
             <div>
               <h3 className="text-2xl font-bold text-secondary mb-6 flex items-center">
-                <FileText className="mr-3 text-primary" /> Documents Required
+                <FaFileAlt className="mr-3 text-primary" /> Documents Required
               </h3>
               <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100">
                 <p>
@@ -208,7 +209,7 @@ const AdmissionsOverview = () => {
                     { text: "Passport Size Photographs (2 Nos)" }
                   ]).map((doc, index) => (
                     <li key={index} className="flex items-start">
-                      <CheckCircle
+                      <FaCheckCircle
                         size={20}
                         className="text-green-500 mr-3 mt-0.5 shrink-0"
                       />
@@ -216,8 +217,48 @@ const AdmissionsOverview = () => {
                     </li>
                   ))}
                 </ul>
-                <button className="mt-8 w-full flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold py-3 rounded-lg hover:bg-primary hover:text-white transition-all">
-                  <Download size={20} /> Download Checklist
+                <button
+                  onClick={() => {
+                    import('jspdf').then(({ default: jsPDF }) => {
+                      const doc = new jsPDF();
+                      const docsToList = documents.length > 0 ? documents : [
+                        { text: "Birth Certificate (Original + )" },
+                        { text: "Transfer Certificate (from previous school)" },
+                        { text: "Passport Size Photographs (2 Nos)" },
+                        { text: "Aadhar Card Copy of Student & Parents ( Original & Copy)" },
+                        { text: "Community Certificate (if applicable)" }
+                      ];
+
+                      // Header
+                      doc.setFontSize(22);
+                      doc.setTextColor(255, 110, 48); // Primary Color
+                      doc.text("Nethaji Vidhyalayam", 105, 20, null, null, "center");
+
+                      // Subheader
+                      doc.setFontSize(16);
+                      doc.setTextColor(30, 36, 110); // Secondary Color
+                      doc.text("Documents Required for Admission", 105, 30, null, null, "center");
+
+                      // Content
+                      doc.setFontSize(12);
+                      doc.setTextColor(60, 60, 60);
+                      let yPos = 50;
+
+                      docsToList.forEach((item, index) => {
+                        doc.text(`${index + 1}. ${item.text}`, 20, yPos);
+                        yPos += 12;
+                      });
+
+                      // Footer
+                      doc.setFontSize(10);
+                      doc.setTextColor(128, 128, 128);
+                      doc.text("Please submit originals alongside copies for formal verification.", 105, yPos + 20, null, null, "center");
+
+                      doc.save("Nethaji_Admission_Documents.pdf");
+                    });
+                  }}
+                  className="mt-8 w-full flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold py-3 rounded-lg hover:bg-primary hover:text-white transition-all">
+                  <FaDownload size={20} /> Download Checklist
                 </button>
               </div>
             </div>
@@ -245,7 +286,7 @@ const AdmissionsOverview = () => {
                 className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/20 transition-all"
               >
                 <h4 className="text-xl font-bold mb-2 flex items-start gap-3">
-                  <HelpCircle size={24} className="text-primary shrink-0" />
+                  <FaQuestionCircle size={24} className="text-primary shrink-0" />
                   {faq.question}
                 </h4>
                 <p className="text-gray-300 ml-9">{faq.answer}</p>

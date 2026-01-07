@@ -80,6 +80,7 @@ class AdmissionsFAQ(models.Model):
 class AdmissionInquiry(models.Model):
     # Student Details
     student_name = models.CharField(max_length=200)
+    gender = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')], default='Male')
     class_applied = models.CharField(max_length=100)
     date_of_birth = models.DateField()
     age_completed = models.CharField(max_length=100)
@@ -98,8 +99,10 @@ class AdmissionInquiry(models.Model):
     address = models.TextField()
     has_previous_schooling = models.BooleanField(default=False)
     previous_school_name = models.CharField(max_length=200, blank=True, null=True)
+    previous_class = models.CharField(max_length=100, blank=True, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='Pending', choices=[('Pending', 'Pending'), ('Resolved', 'Resolved')])
 
     def __str__(self):
         return f"Inquiry for {self.student_name} ({self.class_applied})"

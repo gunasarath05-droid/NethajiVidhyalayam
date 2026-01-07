@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import {
-    FlaskConical, BookOpen, Dumbbell, Laptop, Bus, Utensils, Heart, Shield,
-    CheckCircle, Award, Wifi, Zap, Leaf, Camera, Star
-} from 'lucide-react';
+    FaFlask, FaBookOpen, FaDumbbell, FaLaptop, FaBus, FaUtensils, FaHeart, FaShieldAlt,
+    FaCheckCircle, FaAward, FaWifi, FaBolt, FaLeaf, FaCamera, FaStar, FaFire
+} from 'react-icons/fa';
 import { API_BASE_URL } from '../api/config';
 
 const Facilities = () => {
     const [pageContent, setPageContent] = useState(null);
     const [facilities, setFacilities] = useState([]);
     const [stats, setStats] = useState([]);
-    const [safetyFeatures, setSafetyFeatures] = useState([]);
     const [techItems, setTechItems] = useState([]);
     const [greenInitiatives, setGreenInitiatives] = useState([]);
     const [testimonials, setTestimonials] = useState([]);
     const [certifications, setCertifications] = useState([]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const fetchData = async () => {
             try {
                 const endpoints = [
                     'page-content/current/', 'facilities/', 'stats/',
-                    'safety-features/', 'tech-items/', 'green-initiatives/',
                     'testimonials/', 'certifications/'
                 ];
                 const responses = await Promise.all(
@@ -32,11 +31,8 @@ const Facilities = () => {
                 setPageContent(data[0]);
                 setFacilities(data[1] || []);
                 setStats(data[2] || []);
-                setSafetyFeatures(data[3] || []);
-                setTechItems(data[4] || []);
-                setGreenInitiatives(data[5] || []);
-                setTestimonials(data[6] || []);
-                setCertifications(data[7] || []);
+                setTestimonials(data[3] || []);
+                setCertifications(data[4] || []);
             } catch (error) {
                 console.error("Error fetching facilities data:", error);
             }
@@ -45,17 +41,18 @@ const Facilities = () => {
     }, []);
 
     const iconMap = {
-        FlaskConical: <FlaskConical size={40} />,
-        Laptop: <Laptop size={40} />,
-        BookOpen: <BookOpen size={40} />,
-        Dumbbell: <Dumbbell size={40} />,
-        Bus: <Bus size={40} />,
-        Utensils: <Utensils size={40} />,
-        Shield: <Shield />,
-        Heart: <Heart />,
-        Zap: <Zap />,
-        Wifi: <Wifi />,
-        Camera: <Camera />
+        FlaskConical: <FaFlask size={40} />,
+        Laptop: <FaLaptop size={40} />,
+        BookOpen: <FaBookOpen size={40} />,
+        Dumbbell: <FaDumbbell size={40} />,
+        Bus: <FaBus size={40} />,
+        Utensils: <FaUtensils size={40} />,
+        Shield: <FaShieldAlt />,
+        Heart: <FaHeart />,
+        Zap: <FaBolt />,
+        Wifi: <FaWifi />,
+        Camera: <FaCamera />,
+        Flame: <FaFire />
     };
 
     return (
@@ -123,14 +120,14 @@ const Facilities = () => {
                                 </div>
                                 <div className="lg:w-1/2">
                                     <div className="inline-flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full mb-6">
-                                        {iconMap[facility.icon_name] || <FlaskConical size={40} />}
+                                        {iconMap[facility.icon_name] || <FaFlask size={40} />}
                                     </div>
                                     <h3 className="text-3xl font-bold text-gray-800 mb-4">{facility.title}</h3>
                                     <p className="text-gray-600 text-lg leading-relaxed mb-6">{facility.description}</p>
                                     <div className="grid grid-cols-2 gap-4">
-                                        {(facility.features || []).map((feature, idx) => (
+                                        {(Array.isArray(facility.features) ? facility.features : []).map((feature, idx) => (
                                             <div key={idx} className="flex items-start gap-2">
-                                                <CheckCircle size={18} className="text-green-500 mt-1 shrink-0" />
+                                                <FaCheckCircle size={18} className="text-green-500 mt-1 shrink-0" />
                                                 <span className="text-gray-700">{feature}</span>
                                             </div>
                                         ))}
@@ -151,10 +148,31 @@ const Facilities = () => {
                         <p className="text-gray-600 max-w-2xl mx-auto">Campus-wide protocols ensuring peace of mind for every parent.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {safetyFeatures.map((item, index) => (
+                        {[
+                            {
+                                title: "24/7 CCTV",
+                                description: "Complete surveillance across campus",
+                                icon_name: "Camera"
+                            },
+                            {
+                                title: "Medical Wing",
+                                description: "Full-time nurse and doctor on call",
+                                icon_name: "Heart"
+                            },
+                            {
+                                title: "Fire Safety",
+                                description: "Modern fire detection and suppression systems",
+                                icon_name: "Flame"
+                            },
+                            {
+                                title: "Secure Entry",
+                                description: "Biometric access and visitor management",
+                                icon_name: "Shield"
+                            }
+                        ].map((item, index) => (
                             <div key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all text-center border-t-4 border-primary">
-                                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6 text-primary">
-                                    {iconMap[item.icon_name] || <Shield />}
+                                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full text-2xl mb-6 text-primary">
+                                    {iconMap[item.icon_name] || <FaShieldAlt />}
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
                                 <p className="text-gray-600">{item.description}</p>
@@ -177,18 +195,22 @@ const Facilities = () => {
                         </div>
                         <div className="lg:w-1/2">
                             <h4 className="text-primary font-bold uppercase tracking-widest mb-2">
-                                {pageContent?.tech_badge || "Digital Learning"}
+                                Digital Learning
                             </h4>
                             <h2 className="text-4xl font-bold text-secondary mb-6">
-                                {pageContent?.tech_title || "Technology-Integrated Education"}
+                                Technology-Integrated Education
                             </h2>
                             <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                                {pageContent?.tech_description || "We leverage technology to enhance learning outcomes."}
+                                We leverage technology to enhance learning outcomes.
                             </p>
                             <div className="space-y-4">
-                                {techItems.map((item, index) => (
+                                {[
+                                    { text: "Digital Learning Portals", icon_name: "Zap" },
+                                    { text: "High-speed Campus Wifi", icon_name: "Wifi" },
+                                    { text: "Computer Labs with Latest Software", icon_name: "Laptop" }
+                                ].map((item, index) => (
                                     <div key={index} className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg">
-                                        <div className="text-primary">{iconMap[item.icon_name] || <Wifi />}</div>
+                                        <div className="text-primary text-3xl font-bold">{iconMap[item.icon_name] || <FaWifi />}</div>
                                         <span className="font-medium text-gray-700">{item.text}</span>
                                     </div>
                                 ))}
@@ -198,18 +220,30 @@ const Facilities = () => {
                 </div>
             </section>
 
-            {/* Green Initiatives */}
             <section className="py-20 bg-secondary text-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <Leaf className="mx-auto mb-4 text-primary" size={48} />
-                        <h2 className="text-4xl font-bold mb-4">{pageContent?.green_title || "Eco-Friendly Campus"}</h2>
+                        <FaLeaf className="mx-auto mb-4 text-primary" size={48} />
+                        <h2 className="text-4xl font-bold mb-4">Eco-Friendly Campus</h2>
                         <p className="text-gray-200 max-w-2xl mx-auto">
-                            {pageContent?.green_description || "Committed to sustainability and environmental responsibility."}
+                            Committed to sustainability and environmental responsibility.
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        {greenInitiatives.map((item, index) => (
+                        {[
+                            {
+                                title: "Solar Power",
+                                description: "40% of campus energy from solar panels"
+                            },
+                            {
+                                title: "Rainwater Harvesting",
+                                description: "Advanced water conservation systems"
+                            },
+                            {
+                                title: "Organic Garden",
+                                description: "Student-maintained vegetable and herb garden"
+                            }
+                        ].map((item, index) => (
                             <div key={index} className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center hover:bg-white/20 transition-colors">
                                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
                                 <p className="text-gray-200">{item.description}</p>
@@ -220,7 +254,7 @@ const Facilities = () => {
             </section>
 
             {/* Parent Testimonials */}
-            <section className="py-20 bg-gray-50">
+            {/* <section className="py-20 bg-gray-50">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl font-bold text-secondary mb-4">What Parents Say</h2>
@@ -230,8 +264,8 @@ const Facilities = () => {
                         {testimonials.map((testimonial, index) => (
                             <div key={index} className="bg-white p-8 rounded-xl shadow-lg">
                                 <div className="flex gap-1 mb-4">
-                                    {[...Array(testimonial.rating)].map((_, i) => (
-                                        <Star key={i} size={20} className="text-yellow-400 fill-current" />
+                                    {[...Array(typeof testimonial.rating === 'number' ? testimonial.rating : 0)].map((_, i) => (
+                                        <FaStar key={i} size={20} className="text-yellow-400 fill-current" />
                                     ))}
                                 </div>
                                 <p className="text-gray-600 italic mb-6">"{testimonial.text}"</p>
@@ -243,7 +277,7 @@ const Facilities = () => {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* Certifications */}
             <section className="py-16 bg-white">
@@ -252,7 +286,7 @@ const Facilities = () => {
                     <div className="flex flex-wrap justify-center items-center gap-8">
                         {certifications.map((cert, index) => (
                             <div key={index} className="flex items-center gap-2 bg-gray-50 px-6 py-3 rounded-full">
-                                <Award className="text-primary" size={20} />
+                                <FaAward className="text-primary" size={20} />
                                 <span className="font-medium text-gray-700">{cert.text}</span>
                             </div>
                         ))}

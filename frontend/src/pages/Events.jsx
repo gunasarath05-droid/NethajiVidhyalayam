@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, ArrowRight, X, Filter } from 'lucide-react';
+import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaArrowRight, FaTimes, FaFilter } from 'react-icons/fa';
 import api from '../api/axios';
+import { API_BASE_URL } from '../api/config';
 
 const CATEGORIES = ["All", "Academic", "Sports", "Cultural", "Workshop", "Celebration"];
 
@@ -11,18 +12,11 @@ const Events = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const fetchEvents = async () => {
             try {
                 setLoading(true);
                 const response = await api.get('/events/events/');
-                // Transform backend data if necessary to match UI structure
-                // Backend: title, description, date, time, location, image
-                // UI expects: id, title, date, time, location, category, description, image
-                // Assuming backend returns matching fields or we map them. 
-                // Let's assume backend structure matches for now, except maybe category if not in model.
-                // My backend Event model didn't have 'category'. I should probably add it or default it.
-                // For now, I'll default category to 'General' or derive it if possible, or just ignore filtering if backend doesn't support it.
-                // Actually, filtering in UI relies on 'category'. I should update backend model later to include category, or just map it.
                 const mappedEvents = response.data.map(e => ({
                     ...e,
                     category: e.category || 'General' // Fallback
@@ -72,7 +66,7 @@ const Events = () => {
                 <div className="bg-white rounded-xl shadow-lg p-4 mb-10 overflow-x-auto">
                     <div className="flex items-center space-x-2 min-w-max">
                         <div className="flex items-center text-gray-400 mr-4 border-r border-gray-200 pr-4">
-                            <Filter size={20} />
+                            <FaFilter size={20} />
                             <span className="ml-2 text-sm font-medium">Filter by:</span>
                         </div>
                         {CATEGORIES.map(category => (
@@ -105,13 +99,17 @@ const Events = () => {
                                 {/* Event Image */}
                                 <div className="h-56 overflow-hidden relative">
                                     <img
-                                        src={event.image || 'https://via.placeholder.com/400x300'}
+                                        src={event.image ? (event.image.startsWith('http') ? event.image : `${API_BASE_URL}${event.image}`) : 'https://via.placeholder.com/400x300'}
                                         alt={event.title}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
                                     <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-sm text-center min-w-[70px]">
-                                        <p className="text-xs font-bold text-gray-500 uppercase">{event.date.split(' ')[0] || ''}</p>
-                                        <p className="text-xl font-bold text-[var(--color-brand-navy)] leading-none mt-1">{event.date.split(' ')[1]?.replace(',', '') || ''}</p>
+                                        <p className="text-xs font-bold text-gray-500 uppercase">
+                                            {new Date(event.date).toLocaleString('default', { month: 'short' })}
+                                        </p>
+                                        <p className="text-xl font-bold text-[var(--color-brand-navy)] leading-none mt-1">
+                                            {new Date(event.date).getDate()}
+                                        </p>
                                     </div>
                                     <div className="absolute top-4 right-4">
                                         <span className="px-3 py-1 bg-[var(--color-primary)] text-white text-xs font-bold rounded-full shadow-sm">
@@ -128,11 +126,11 @@ const Events = () => {
 
                                     <div className="space-y-3 mb-6">
                                         <div className="flex items-start text-gray-600 text-sm">
-                                            <Clock className="w-4 h-4 mr-3 mt-0.5 text-[var(--color-primary)]" />
+                                            <FaClock className="w-4 h-4 mr-3 mt-0.5 text-[var(--color-primary)]" />
                                             <span>{event.time}</span>
                                         </div>
                                         <div className="flex items-start text-gray-600 text-sm">
-                                            <MapPin className="w-4 h-4 mr-3 mt-0.5 text-[var(--color-primary)]" />
+                                            <FaMapMarkerAlt className="w-4 h-4 mr-3 mt-0.5 text-[var(--color-primary)]" />
                                             <span>{event.location}</span>
                                         </div>
                                     </div>
@@ -147,7 +145,7 @@ const Events = () => {
                                             className="w-full py-3 px-4 bg-gray-50 hover:bg-[var(--color-brand-navy)] hover:text-white text-[var(--color-brand-navy)] font-semibold rounded-xl transition-all duration-300 flex items-center justify-center group/btn"
                                         >
                                             View Details
-                                            <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+                                            <FaArrowRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
                                         </button>
                                     </div>
                                 </div>
@@ -181,13 +179,13 @@ const Events = () => {
                             onClick={() => setSelectedEvent(null)}
                             className="absolute top-4 right-4 p-2 bg-black/10 hover:bg-black/20 rounded-full text-white z-10 transition-colors"
                         >
-                            <X size={24} />
+                            <FaTimes size={24} />
                         </button>
 
                         <div className="grid grid-cols-1 md:grid-cols-2">
                             <div className="h-64 md:h-full relative">
                                 <img
-                                    src={selectedEvent.image || 'https://via.placeholder.com/400x300'}
+                                    src={selectedEvent.image ? (selectedEvent.image.startsWith('http') ? selectedEvent.image : `${API_BASE_URL}${selectedEvent.image}`) : 'https://via.placeholder.com/400x300'}
                                     alt={selectedEvent.title}
                                     className="w-full h-full object-cover"
                                 />
@@ -214,16 +212,18 @@ const Events = () => {
                                 <div className="space-y-4 mb-8">
                                     <div className="flex items-center text-gray-700">
                                         <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center mr-4 text-[var(--color-primary)]">
-                                            <Calendar size={20} />
+                                            <FaCalendarAlt size={20} />
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Date</p>
-                                            <p className="font-medium">{selectedEvent.date}</p>
+                                            <p className="font-medium">
+                                                {new Date(selectedEvent.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="flex items-center text-gray-700">
                                         <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-4 text-[var(--color-brand-navy)]">
-                                            <Clock size={20} />
+                                            <FaClock size={20} />
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Time</p>
@@ -232,7 +232,7 @@ const Events = () => {
                                     </div>
                                     <div className="flex items-center text-gray-700">
                                         <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mr-4 text-green-600">
-                                            <MapPin size={20} />
+                                            <FaMapMarkerAlt size={20} />
                                         </div>
                                         <div>
                                             <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Location</p>

@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  CreditCard,
-  User,
-  CheckCircle,
-  Shield,
-  Lock,
-  QrCode,
-  X,
-} from "lucide-react";
+  FaCreditCard,
+  FaUser,
+  FaCheckCircle,
+  FaShieldAlt,
+  FaLock,
+  FaQrcode,
+  FaTimes,
+} from "react-icons/fa";
 import qrImage from "../images/payment-qr.png";
 
 const PayFees = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [showQR, setShowQR] = useState(false);
   const [formData, setFormData] = useState({
     studentName: "",
@@ -46,7 +49,7 @@ const PayFees = () => {
           {/* Payment Form */}
           <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-2">
-              <CreditCard className="text-primary" /> Payment Details
+              <FaCreditCard className="text-primary" /> Payment Details
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -57,7 +60,7 @@ const PayFees = () => {
                     Student Name *
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                     <input
                       type="text"
                       name="studentName"
@@ -112,7 +115,7 @@ const PayFees = () => {
 
               {/* Security Note */}
               <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-                <Shield className="text-green-600 shrink-0" size={20} />
+                <FaShieldAlt className="text-green-600 shrink-0" size={20} />
                 <p className="text-sm text-green-700">
                   Your payment is secured with end-to-end encryption. You will be shown a QR code for payment after clicking the button below.
                 </p>
@@ -122,7 +125,7 @@ const PayFees = () => {
                 type="submit"
                 className="w-full bg-linear-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg text-lg transform hover:-translate-y-1"
               >
-                <QrCode size={22} /> Generate Payment QR
+                <FaQrcode size={22} /> Generate Payment QR
               </button>
             </form>
           </div>
@@ -130,14 +133,14 @@ const PayFees = () => {
           {/* Additional Info */}
           <div className="mt-8 grid grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-              <CheckCircle className="text-primary" size={24} />
+              <FaCheckCircle className="text-primary" size={24} />
               <div>
                 <p className="font-bold text-gray-900 text-sm">Instant Receipt</p>
                 <p className="text-xs text-gray-500">Get confirmation immediately</p>
               </div>
             </div>
             <div className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-              <Lock className="text-primary" size={24} />
+              <FaLock className="text-primary" size={24} />
               <div>
                 <p className="font-bold text-gray-900 text-sm">Secure Payment</p>
                 <p className="text-xs text-gray-500">100% encrypted checkout</p>
@@ -158,7 +161,7 @@ const PayFees = () => {
                   onClick={closeModal}
                   className="p-2 hover:bg-gray-200 rounded-full transition-colors"
                 >
-                  <X size={24} />
+                  <FaTimes size={24} />
                 </button>
               </div>
 

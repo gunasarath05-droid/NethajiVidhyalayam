@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Users,
-    MessageSquare,
-    Briefcase,
-    LogOut,
-    LayoutDashboard,
-    Plus,
-    Trash2,
-    Edit2,
-    CheckCircle,
-    Download,
-    Menu,
-    X,
-    Calendar,
-    Filter,
-    Phone,
-    Mail,
-    Clock,
-    Printer
-} from 'lucide-react';
+    FaUsers,
+    FaComment,
+    FaBriefcase,
+    FaSignOutAlt,
+    FaThLarge,
+    FaPlus,
+    FaTrash,
+    FaEdit,
+    FaCheckCircle,
+    FaDownload,
+    FaBars,
+    FaTimes,
+    FaCalendarAlt,
+    FaFilter,
+    FaPhoneAlt,
+    FaEnvelope,
+    FaClock,
+    FaPrint
+} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 
@@ -31,20 +31,51 @@ const AdminStaff = () => {
     const [students, setStudents] = useState([]);
     const [enquiries, setEnquiries] = useState([]);
     const [careers, setCareers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [contactMessages, setContactMessages] = useState([]);
+    const [events, setEvents] = useState([]);
+    const [, setLoading] = useState(true);
 
     // Fetch Data
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [studentsRes, enquiriesRes, careersRes] = await Promise.all([
+            const [studentsRes, enquiriesRes, careersRes, contactRes, eventsRes] = await Promise.all([
                 api.get('/administration/students/'),
-                api.get('/administration/enquiries/'),
-                api.get('/administration/careers/')
+                api.get('/admissions/inquiries/'),
+                api.get('/contact/career-applications/'),
+                api.get('/contact/messages/'),
+                api.get('/events/events/')
             ]);
             setStudents(studentsRes.data);
-            setEnquiries(enquiriesRes.data);
-            setCareers(careersRes.data);
+
+            // Map Admission Inquiries to match fields expected by UI (name, email, phone, message)
+            const mappedEnquiries = enquiriesRes.data.map(enq => ({
+                id: enq.id,
+                name: enq.student_name || 'Unknown',
+                gender: enq.gender,
+                email: enq.father_contact, // Use father contact as email placeholder or create a display field
+                phone: enq.father_contact,
+                date: enq.created_at ? new Date(enq.created_at).toLocaleDateString() : 'N/A', // Ensure date exists
+                message: `Gender: ${enq.gender}, Class: ${enq.class_applied}, Father: ${enq.father_name}${enq.has_previous_schooling ? `, Prev School: ${enq.previous_school_name}, Prev Class: ${enq.previous_class}` : ''}`,
+                status: enq.status || 'Pending' // Ensure status exists
+            }));
+            setEnquiries(mappedEnquiries);
+
+            // Map Career Applications if needed, though they seem to have 'name'
+            const mappedCareers = careersRes.data.map(job => {
+                const positions = [];
+                if (job.position) positions.push(job.position);
+
+                return {
+                    ...job,
+                    positions_display: positions.join(', ') || 'N/A',
+                    applied_date: job.created_at ? new Date(job.created_at).toLocaleDateString() : 'N/A'
+                };
+            });
+            setCareers(mappedCareers);
+
+            setContactMessages(contactRes.data);
+            setEvents(eventsRes?.data || []);
         } catch (error) {
             console.error("Failed to fetch data", error);
         } finally {
@@ -53,6 +84,7 @@ const AdminStaff = () => {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchData();
     }, []);
 
@@ -70,10 +102,12 @@ const AdminStaff = () => {
     // Modals
     const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
     const [currentStudent, setCurrentStudent] = useState(null);
+    const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+    const [currentEvent, setCurrentEvent] = useState(null);
 
     // --- FILTER LOGIC ---
     const filteredStudents = students.filter(student => {
-        const matchesSearch = student.name.toLowerCase().includes(studentSearch.toLowerCase()) ||
+        const matchesSearch = (student.name || '').toLowerCase().includes(studentSearch.toLowerCase()) ||
             student.student_id?.toLowerCase().includes(studentSearch.toLowerCase());
         const matchesClass = studentClass === 'All' || student.class_name === studentClass;
         const matchesSection = studentSection === 'All' || student.section === studentSection;
@@ -163,12 +197,59 @@ const AdminStaff = () => {
 
     const handleResolveEnquiry = async (id) => {
         try {
-            const enquiry = enquiries.find(e => e.id === id);
-            const res = await api.patch(`/administration/enquiries/${id}/`, { status: 'Resolved' });
+
+            const res = await api.patch(`/admissions/inquiries/${id}/`, { status: 'Resolved' });
             setEnquiries(enquiries.map(e => e.id === id ? res.data : e));
         } catch (error) {
             console.error("Failed to resolve enquiry", error);
         }
+    };
+
+    const handleDeleteEvent = async (id) => {
+        if (window.confirm('Are you sure you want to delete this event?')) {
+            try {
+                await api.delete(`/events/events/${id}/`);
+                setEvents(events.filter(e => e.id !== id));
+            } catch (error) {
+                console.error("Failed to delete event", error);
+                alert("Failed to delete event");
+            }
+        }
+    };
+
+    const handleSaveEvent = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        // Handle file input for image
+        const imageFile = formData.get('image');
+        if (imageFile.size === 0) {
+            formData.delete('image');
+        }
+
+        try {
+            if (currentEvent) {
+                const res = await api.put(`/events/events/${currentEvent.id}/`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                setEvents(events.map(ev => ev.id === currentEvent.id ? res.data : ev));
+            } else {
+                const res = await api.post('/events/events/', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                setEvents([...events, res.data]);
+            }
+            setIsEventModalOpen(false);
+            setCurrentEvent(null);
+        } catch (error) {
+            console.error("Failed to save event", error);
+            alert("Failed to save event");
+        }
+    };
+
+    const openEventModal = (event = null) => {
+        setCurrentEvent(event);
+        setIsEventModalOpen(true);
     };
 
     const handlePrint = () => {
@@ -211,23 +292,28 @@ const AdminStaff = () => {
 
                     <div className="flex items-center gap-4 mb-4 z-10 w-full justify-center md:justify-start">
                         <div className="w-12 h-12 bg-white text-[var(--color-primary)] border-2 border-[var(--color-primary)]/10 rounded-full flex items-center justify-center text-xl font-bold shadow-sm shrink-0">
-                            {enq.name.charAt(0)}
+                            {enq.name ? enq.name.charAt(0) : '?'}
                         </div>
                         <div className="overflow-hidden text-left">
-                            <h3 className="font-bold text-gray-800 text-lg leading-tight truncate">{enq.name}</h3>
+                            <div className="flex items-center gap-2">
+                                <h3 className="font-bold text-gray-800 text-lg leading-tight truncate">{enq.name}</h3>
+                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${enq.gender === 'Female' ? 'bg-pink-100 text-pink-600' : enq.gender === 'Male' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                                    {enq.gender ? enq.gender.charAt(0) : '?'}
+                                </span>
+                            </div>
                             <div className="text-xs text-gray-400 font-medium flex items-center mt-1">
-                                <Clock size={12} className="mr-1" /> {enq.date}
+                                <FaClock size={12} className="mr-1" /> {enq.date}
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-2 w-full z-10 pl-1">
                         <div className="flex items-center justify-center md:justify-start text-sm text-gray-600 hover:text-[var(--color-primary)] transition-colors">
-                            <Phone size={14} className="mr-3 text-gray-600 font-semibold" />
+                            <FaPhoneAlt size={14} className="mr-3 text-gray-600 font-semibold" />
                             <span className="font-semibold" title={enq.phone}>{enq.phone}</span>
                         </div>
                         <div className="flex items-center justify-center md:justify-start text-sm text-gray-600 hover:text-[var(--color-primary)] transition-colors">
-                            <Mail size={14} className="mr-3 text-gray-600" />
+                            <FaEnvelope size={14} className="mr-3 text-gray-600" />
                             <span className="truncate font-semibold" title={enq.email}>{enq.email}</span>
                         </div>
                     </div>
@@ -235,7 +321,7 @@ const AdminStaff = () => {
 
                 {/* Middle: Message */}
                 <div className="p-8 flex-1 flex flex-col justify-center relative bg-white">
-                    <MessageSquare className="absolute top-6 left-6 text-gray-50 -z-0" size={80} />
+                    <FaComment className="absolute top-6 left-6 text-gray-50 -z-0" size={80} />
                     <div className="relative z-10 pl-4 border-l-2 border-gray-100">
                         <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Enquiry Message</h4>
                         <p className="text-gray-700 leading-relaxed text-base font-medium">
@@ -257,13 +343,13 @@ const AdminStaff = () => {
                             className="group md:w-full flex items-center justify-center gap-2 bg-white hover:bg-green-500 text-gray-600 hover:text-white px-4 py-2.5 rounded-xl border border-gray-200 hover:border-green-500 transition-all shadow-sm hover:shadow-md"
                             title="Mark as Resolved"
                         >
-                            <CheckCircle size={18} className="text-green-500 group-hover:text-white transition-colors" />
+                            <FaCheckCircle size={18} className="text-green-500 group-hover:text-white transition-colors" />
                             <span className="font-bold text-sm">Resolve</span>
                         </button>
                     ) : (
                         <div className="flex flex-col items-center justify-center text-green-500 opacity-80">
                             <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mb-1">
-                                <CheckCircle size={24} />
+                                <FaCheckCircle size={24} />
                             </div>
                             <span className="text-[10px] font-bold uppercase tracking-widest text-green-700">Completed</span>
                         </div>
@@ -285,19 +371,21 @@ const AdminStaff = () => {
                         <div className="w-8 h-8 bg-[var(--color-primary)] rounded-lg flex items-center justify-center font-bold">N</div>
                         <span className="text-lg font-bold tracking-wide">ADMIN PANEL</span>
                     </div>
-                    <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400"><X size={24} /></button>
+                    <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400"><FaTimes size={24} /></button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto py-4">
-                    <SidebarItem id="dashboard" icon={LayoutDashboard} label="Overview" />
-                    <SidebarItem id="students" icon={Users} label="Students" />
-                    <SidebarItem id="enquiries" icon={MessageSquare} label="Enquiries" />
-                    <SidebarItem id="careers" icon={Briefcase} label="Careers" />
+                    <SidebarItem id="dashboard" icon={FaThLarge} label="Overview" />
+                    <SidebarItem id="students" icon={FaUsers} label="Students" />
+                    <SidebarItem id="enquiries" icon={FaComment} label="Admissions" />
+                    <SidebarItem id="events" icon={FaCalendarAlt} label="Events" />
+                    <SidebarItem id="careers" icon={FaBriefcase} label="Careers" />
+                    <SidebarItem id="messages" icon={FaEnvelope} label="Contact Msgs" />
                 </div>
 
                 <div className="p-4 border-t border-gray-800">
                     <button onClick={handleLogout} className="flex items-center space-x-3 text-red-400 hover:text-red-300 px-4 py-2 w-full transition-colors">
-                        <LogOut size={20} />
+                        <FaSignOutAlt size={20} />
                         <span>Logout</span>
                     </button>
                 </div>
@@ -307,7 +395,7 @@ const AdminStaff = () => {
             <div className="flex-1 flex flex-col max-w-full overflow-hidden">
                 {/* Header (HIDDEN ON PRINT) */}
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 lg:px-8 z-10 no-print">
-                    <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-600"><Menu size={24} /></button>
+                    <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-600"><FaBars size={24} /></button>
                     <div className="flex-1"></div>
                     <div className="flex items-center space-x-4">
                         <div className="text-right hidden md:block">
@@ -331,9 +419,10 @@ const AdminStaff = () => {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <StatCard label="Total Students" value={students.length} icon={Users} color="bg-blue-500" onClick={() => setActiveTab('students')} />
-                                <StatCard label="New Enquiries" value={enquiries.filter(e => e.status === 'Pending').length} icon={MessageSquare} color="bg-orange-500" onClick={() => setActiveTab('enquiries')} />
-                                <StatCard label="Career Applications" value={careers.length} icon={Briefcase} color="bg-purple-500" onClick={() => setActiveTab('careers')} />
+                                <StatCard label="Total Students" value={students.length} icon={FaUsers} color="bg-blue-500" onClick={() => setActiveTab('students')} />
+                                <StatCard label="Admissions" value={enquiries.length} icon={FaComment} color="bg-orange-500" onClick={() => setActiveTab('enquiries')} />
+                                <StatCard label="Events" value={events.length} icon={FaCalendarAlt} color="bg-green-500" onClick={() => setActiveTab('events')} />
+                                <StatCard label="Career Apps" value={careers.length} icon={FaBriefcase} color="bg-purple-500" onClick={() => setActiveTab('careers')} />
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -347,13 +436,13 @@ const AdminStaff = () => {
                                         {enquiries.slice(0, 3).map(enq => (
                                             <div key={enq.id} className="flex items-start space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
                                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${enq.status === 'Resolved' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}`}>
-                                                    {enq.name.charAt(0)}
+                                                    {enq.name ? enq.name.charAt(0) : '?'}
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <h3 className="text-sm font-bold text-gray-800 truncate">{enq.name}</h3>
                                                     <p className="text-xs text-gray-500 truncate mb-1">{enq.message}</p>
                                                     <div className="flex items-center text-[10px] text-gray-400">
-                                                        <Clock size={10} className="mr-1" /> {enq.date}
+                                                        <FaClock size={10} className="mr-1" /> {enq.date}
                                                     </div>
                                                 </div>
                                                 <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${enq.status === 'Resolved' ? 'bg-green-50 text-green-600' : 'bg-orange-50 text-orange-600'}`}>
@@ -374,11 +463,11 @@ const AdminStaff = () => {
                                         {careers.slice(0, 3).map(job => (
                                             <div key={job.id} className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
                                                 <div className="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center shrink-0">
-                                                    <Briefcase size={18} />
+                                                    <FaBriefcase size={18} />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <h3 className="text-sm font-bold text-gray-800 truncate">{job.position}</h3>
-                                                    <p className="text-xs text-gray-600 truncate">{job.name}</p>
+                                                    <h3 className="text-sm font-bold text-gray-800 truncate">{job.position || 'Unknown Role'}</h3>
+                                                    <p className="text-xs text-gray-600 truncate">{job.name || 'Unknown Applicant'}</p>
                                                 </div>
                                                 <div className="text-right">
                                                     <div className="text-[10px] text-gray-400 font-medium">{job.applied_date}</div>
@@ -400,7 +489,7 @@ const AdminStaff = () => {
                                     <p className="text-gray-500">Manage student records and details.</p>
                                 </div>
                                 <button onClick={() => openStudentModal()} className="flex items-center px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-md">
-                                    <Plus size={18} className="mr-2" /> Add Student
+                                    <FaPlus size={18} className="mr-2" /> Add Student
                                 </button>
                             </div>
 
@@ -440,8 +529,8 @@ const AdminStaff = () => {
                                                     <td className="p-4 text-gray-600"><span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-bold">{student.class_name} - {student.section}</span></td>
                                                     <td className="p-4"><div className="text-sm text-gray-800">{student.parent_name}</div><div className="text-xs text-gray-500">{student.phone}</div></td>
                                                     <td className="p-4 text-right space-x-2">
-                                                        <button onClick={() => openStudentModal(student)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg"><Edit2 size={16} /></button>
-                                                        <button onClick={() => handleDeleteStudent(student.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg"><Trash2 size={16} /></button>
+                                                        <button onClick={() => openStudentModal(student)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg"><FaEdit size={16} /></button>
+                                                        <button onClick={() => handleDeleteStudent(student.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg"><FaTrash size={16} /></button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -467,7 +556,7 @@ const AdminStaff = () => {
                                         onClick={handlePrint}
                                         className="flex items-center px-4 py-2 bg-[var(--color-brand-navy)] text-white rounded-lg hover:bg-gray-800 transition-colors shadow-sm font-medium"
                                     >
-                                        <Printer size={18} className="mr-2" />
+                                        <FaPrint size={18} className="mr-2" />
                                         Print Enquiries
                                     </button>
                                 </div>
@@ -478,7 +567,7 @@ const AdminStaff = () => {
                                 {/* Left Side: Status Filter */}
                                 <div className="flex items-center gap-3 w-full md:w-auto">
                                     <div className="flex items-center text-gray-500 font-medium">
-                                        <Filter size={18} className="mr-2" />
+                                        <FaFilter size={18} className="mr-2" />
                                         <span className="hidden md:inline">Filter Status:</span>
                                     </div>
                                     <select
@@ -534,7 +623,7 @@ const AdminStaff = () => {
                                     filteredEnquiries.map(enq => <EnquiryCard key={enq.id} enq={enq} />)
                                 ) : (
                                     <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
-                                        <div className="mb-4 text-gray-300 flex justify-center"><MessageSquare size={48} /></div>
+                                        <div className="mb-4 text-gray-300 flex justify-center"><FaComment size={48} /></div>
                                         <p className="text-gray-500 font-medium">No enquiries found matching your filters.</p>
                                         <button
                                             onClick={() => { setEnquiryDate(''); setEnquiryMonth('All'); setEnquiryYear('All'); setEnquiryStatus('All'); }}
@@ -559,6 +648,7 @@ const AdminStaff = () => {
                                             <tr className="border-b-2 border-gray-800 text-black">
                                                 <th className="py-2 pr-4 text-sm font-bold uppercase">Date</th>
                                                 <th className="py-2 pr-4 text-sm font-bold uppercase">Name</th>
+                                                <th className="py-2 pr-4 text-sm font-bold uppercase">Gender</th>
                                                 <th className="py-2 pr-4 text-sm font-bold uppercase">Phone</th>
                                                 <th className="py-2 pr-4 text-sm font-bold uppercase">Email</th>
                                                 <th className="py-2 text-sm font-bold uppercase">Status</th>
@@ -569,6 +659,7 @@ const AdminStaff = () => {
                                                 <tr key={enq.id} className="border-b border-gray-300">
                                                     <td className="py-3 pr-4 text-sm text-gray-800">{enq.date}</td>
                                                     <td className="py-3 pr-4 text-sm font-semibold text-gray-900">{enq.name}</td>
+                                                    <td className="py-3 pr-4 text-sm text-gray-800">{enq.gender}</td>
                                                     <td className="py-3 pr-4 text-sm text-gray-800">{enq.phone}</td>
                                                     <td className="py-3 pr-4 text-sm text-gray-800">{enq.email}</td>
                                                     <td className="py-3 pr-4 text-sm text-gray-800">
@@ -592,6 +683,61 @@ const AdminStaff = () => {
                         </div>
                     )}
 
+                    {/* --- EVENTS MANAGEMENT --- */}
+                    {activeTab === 'events' && (
+                        <div className="space-y-6 animate-in fade-in duration-500 no-print">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-800">Events Management</h1>
+                                    <p className="text-gray-500">Manage school events and activities.</p>
+                                </div>
+                                <button onClick={() => openEventModal()} className="flex items-center px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-md">
+                                    <FaPlus size={18} className="mr-2" /> Add Event
+                                </button>
+                            </div>
+
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 text-sm uppercase tracking-wider">
+                                                <th className="p-4 font-semibold">Date</th>
+                                                <th className="p-4 font-semibold">Title</th>
+                                                <th className="p-4 font-semibold">Category</th>
+                                                <th className="p-4 font-semibold">Location</th>
+                                                <th className="p-4 font-semibold text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-50">
+                                            {events.map(ev => (
+                                                <tr key={ev.id} className="hover:bg-gray-50 transition-colors">
+                                                    <td className="p-4 text-gray-600 font-medium text-sm">
+                                                        <div>{ev.date}</div>
+                                                        <div className="text-xs text-gray-400">{ev.time}</div>
+                                                    </td>
+                                                    <td className="p-4 font-bold text-gray-800">{ev.title}</td>
+                                                    <td className="p-4">
+                                                        <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-bold uppercase">{ev.category}</span>
+                                                    </td>
+                                                    <td className="p-4 text-gray-600 text-sm">{ev.location}</td>
+                                                    <td className="p-4 text-right space-x-2">
+                                                        <button onClick={() => openEventModal(ev)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg"><FaEdit size={16} /></button>
+                                                        <button onClick={() => handleDeleteEvent(ev.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg"><FaTrash size={16} /></button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {events.length === 0 && (
+                                                <tr>
+                                                    <td colSpan="5" className="p-8 text-center text-gray-500">No events found. Add your first event!</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* --- CAREERS VIEW --- */}
                     {activeTab === 'careers' && (
                         <div className="space-y-6 animate-in fade-in duration-500 no-print">
@@ -606,6 +752,7 @@ const AdminStaff = () => {
                                             <th className="p-4 font-semibold">Applicant Name</th>
                                             <th className="p-4 font-semibold">Position</th>
                                             <th className="p-4 font-semibold">Qualification</th>
+                                            <th className="p-4 font-semibold">Prof. Degree</th>
                                             <th className="p-4 font-semibold">Applied Date</th>
                                             <th className="p-4 font-semibold text-right">Resume</th>
                                         </tr>
@@ -614,13 +761,54 @@ const AdminStaff = () => {
                                         {careers.map(job => (
                                             <tr key={job.id} className="hover:bg-gray-50 transition-colors">
                                                 <td className="p-4"><div className="font-bold text-gray-800">{job.name}</div><div className="text-xs text-gray-400">{job.email}</div></td>
-                                                <td className="p-4 text-gray-700 font-medium">{job.position}</td>
-                                                <td className="p-4 text-gray-600 text-sm">{job.qualification}</td>
+                                                <td className="p-4 text-gray-700 font-medium">{job.positions_display}</td>
+                                                <td className="p-4 text-gray-600 text-sm">{job.qualification || 'N/A'}</td>
+                                                <td className="p-4 text-gray-600 text-sm">{job.professional_degree || 'N/A'}</td>
                                                 <td className="p-4 text-gray-500 text-sm">{job.applied_date}</td>
                                                 <td className="p-4 text-right">
                                                     <button className="inline-flex items-center px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[var(--color-brand-navy)] transition-colors">
-                                                        <Download size={14} className="mr-2" /> Download
+                                                        <FaDownload size={14} className="mr-2" /> Download
                                                     </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    )}
+
+                    {/* --- CONTACT MESSAGES VIEW --- */}
+                    {activeTab === 'messages' && (
+                        <div className="space-y-6 animate-in fade-in duration-500 no-print">
+                            <div>
+                                <h1 className="text-2xl font-bold text-gray-800">Contact Messages</h1>
+                                <p className="text-gray-500">General inquiries and feedback from Contact Us page.</p>
+                            </div>
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 text-sm uppercase tracking-wider">
+                                            <th className="p-4 font-semibold">Date</th>
+                                            <th className="p-4 font-semibold">Name</th>
+                                            <th className="p-4 font-semibold">Subject</th>
+                                            <th className="p-4 font-semibold">Message</th>
+                                            <th className="p-4 font-semibold text-right">Contact</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {contactMessages.map(msg => (
+                                            <tr key={msg.id} className="hover:bg-gray-50 transition-colors">
+                                                <td className="p-4 text-gray-500 text-sm">{new Date(msg.created_at).toLocaleDateString()}</td>
+                                                <td className="p-4 font-bold text-gray-800">{msg.name}</td>
+                                                <td className="p-4 text-gray-700">
+                                                    <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs font-bold uppercase">{msg.subject}</span>
+                                                </td>
+                                                <td className="p-4 text-gray-600 text-sm max-w-xs truncate" title={msg.message}>{msg.message}</td>
+                                                <td className="p-4 text-right">
+                                                    <div className="text-sm text-gray-800">{msg.email}</div>
+                                                    <div className="text-xs text-gray-500">{msg.phone}</div>
                                                 </td>
                                             </tr>
                                         ))}
@@ -629,7 +817,6 @@ const AdminStaff = () => {
                             </div>
                         </div>
                     )}
-
                 </main>
             </div>
 
@@ -639,7 +826,7 @@ const AdminStaff = () => {
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                             <h2 className="text-xl font-bold text-gray-800">{currentStudent ? 'Edit Student' : 'Add New Student'}</h2>
-                            <button onClick={() => setIsStudentModalOpen(false)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
+                            <button onClick={() => setIsStudentModalOpen(false)} className="text-gray-400 hover:text-gray-600"><FaTimes size={24} /></button>
                         </div>
                         <form onSubmit={handleSaveStudent} className="p-6 space-y-4">
                             <div className="grid grid-cols-2 gap-4">
@@ -662,7 +849,56 @@ const AdminStaff = () => {
                     </div>
                 </div>
             )}
-        </div>
+
+            {/* Event Add/Edit Modal (NO PRINT) */}
+            {
+                isEventModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 no-print">
+                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+                            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                                <h2 className="text-xl font-bold text-gray-800">{currentEvent ? 'Edit Event' : 'Add New Event'}</h2>
+                                <button onClick={() => setIsEventModalOpen(false)} className="text-gray-400 hover:text-gray-600"><FaTimes size={24} /></button>
+                            </div>
+                            <form onSubmit={handleSaveEvent} className="p-6 space-y-4">
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Event Title</label><input name="title" defaultValue={currentEvent?.title} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" /></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Date</label><input name="date" type="date" defaultValue={currentEvent?.date} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" /></div>
+                                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Time</label><input name="time" type="time" defaultValue={currentEvent?.time} className="w-full px-3 py-2 border border-gray-300 rounded-lg" /></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 mb-1">Category</label>
+                                        <select name="category" defaultValue={currentEvent?.category || 'Academic'} className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white">
+                                            <option value="Academic">Academic</option>
+                                            <option value="Sports">Sports</option>
+                                            <option value="Cultural">Cultural</option>
+                                            <option value="Workshop">Workshop</option>
+                                            <option value="Celebration">Celebration</option>
+                                        </select>
+                                    </div>
+                                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Location</label><input name="location" defaultValue={currentEvent?.location} className="w-full px-3 py-2 border border-gray-300 rounded-lg" /></div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-1">Description</label>
+                                    <textarea name="description" rows="4" defaultValue={currentEvent?.description} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-1">Event Image</label>
+                                    {currentEvent?.image && <div className="text-xs text-gray-500 mb-2">Current: {currentEvent.image}</div>}
+                                    <input name="image" type="file" accept="image/*" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                                </div>
+                                <div className="pt-4 flex justify-end space-x-3 border-t border-gray-100 mt-4">
+                                    <button type="button" onClick={() => setIsEventModalOpen(false)} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium">Cancel</button>
+                                    <button type="submit" className="px-6 py-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white rounded-lg font-bold">Save Event</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
     );
 };
 

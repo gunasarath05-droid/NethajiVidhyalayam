@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Phone, Mail } from 'lucide-react';
+import { MdMenu, MdClose, MdPhone, MdEmail } from 'react-icons/md';
+import { FaChevronDown } from 'react-icons/fa';
+import logo from '../images/logo 512.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,32 +63,31 @@ const Navbar = () => {
       <div className="bg-primary text-white py-2 text-sm hidden md:block">
         <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-6">
-            <span className="flex items-center gap-2">
-              <Phone size={16} /> +91 123 456 7890
-            </span>
-            <span className="flex items-center gap-2">
-              <Mail size={16} /> info@nethajividyalayam.com
-            </span>
+            <a href="tel:+911234567890" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
+              <MdPhone size={16} /> +91 123 456 7890
+            </a>
+            <a href="mailto:info@nethajividyalayam.com" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
+              <MdEmail size={16} /> info@nethajividyalayam.com
+            </a>
           </div>
           <div className="flex items-center space-x-4">
             <Link to="/login" className="hover:text-gray-200 transition-colors">Login</Link>
-            <Link to="/pay-fees" className="hover:text-gray-200 transition-colors">Pay Fees</Link>
+            <Link to="/pay-fees" className="hover:text-gray-200 transition-colors">FeeDesk</Link>
           </div>
         </div>
       </div>
 
       {/* Main Navbar */}
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-32">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-4">
             {/* Placeholder for Logo */}
-            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-xl">
-              N
-            </div>
+            <img src={logo} alt="Netaji School" className="h-28 w-auto object-contain" />
+
             <div className="flex flex-col">
-              <span className="text-xl font-bold text-secondary leading-tight">NETHAJI</span>
-              <span className="text-sm font-semibold text-primary tracking-wider">VIDYALAYAM</span>
+              <span className="text-2xl font-bold text-secondary leading-tight">NETHAJI</span>
+              <span className="text-xl font-semibold text-primary tracking-wider">VIDYALAYAM</span>
             </div>
           </Link>
 
@@ -97,7 +98,7 @@ const Navbar = () => {
                 {item.submenu ? (
                   <button className="flex items-center px-3 py-2 text-secondary hover:text-primary font-medium transition-colors group-hover:text-primary">
                     {item.title}
-                    <ChevronDown size={16} className="ml-1 group-hover:rotate-180 transition-transform duration-200" />
+                    <FaChevronDown size={14} className="ml-1 group-hover:rotate-180 transition-transform duration-200" />
                   </button>
                 ) : (
                   <Link
@@ -131,7 +132,7 @@ const Navbar = () => {
             className="md:hidden text-gray-700 hover:text-primary transition-colors"
             onClick={toggleMenu}
           >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
+            {isOpen ? <MdClose size={28} /> : <MdMenu size={28} />}
           </button>
         </div>
       </div>
@@ -151,7 +152,7 @@ const Navbar = () => {
         <div className="p-5 border-b flex justify-between items-center">
           <span className="font-bold text-lg text-primary">Menu</span>
           <button onClick={toggleMenu} className="text-gray-500 hover:text-red-500">
-            <X size={24} />
+            <MdClose size={24} />
           </button>
         </div>
         <div className="overflow-y-auto h-[calc(100vh-70px)] py-4">
@@ -164,8 +165,8 @@ const Navbar = () => {
                     className="w-full flex justify-between items-center px-6 py-4 text-left text-gray-700 font-medium hover:bg-gray-50 hover:text-primary transition-colors"
                   >
                     {item.title}
-                    <ChevronDown
-                      size={16}
+                    <FaChevronDown
+                      size={14}
                       className={`transform transition-transform duration-200 ${activeDropdown === index ? 'rotate-180' : ''
                         }`}
                     />

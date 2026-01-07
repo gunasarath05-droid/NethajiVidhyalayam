@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Calendar, Award, TrendingUp, Building } from 'lucide-react';
+import { FaArrowRight, FaCalendarAlt, FaAward, FaChartLine, FaBuilding } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../api/config';
 
@@ -8,13 +8,14 @@ const History = () => {
     const [milestones, setMilestones] = useState([]);
 
     const iconMap = {
-        Calendar: <Calendar size={24} />,
-        Award: <Award size={24} />,
-        TrendingUp: <TrendingUp size={24} />,
-        Building: <Building size={24} />,
+        Calendar: <FaCalendarAlt size={24} />,
+        Award: <FaAward size={24} />,
+        TrendingUp: <FaChartLine size={24} />,
+        Building: <FaBuilding size={24} />,
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const fetchHistoryData = async () => {
             try {
                 const [contentRes, milestonesRes] = await Promise.all([
@@ -95,7 +96,7 @@ const History = () => {
                                         <p className="text-gray-600 leading-relaxed mb-4">{item.description}</p>
                                         <div className={`inline-flex items-center text-primary font-semibold ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                                             <span className="p-2 bg-primary/10 rounded-lg mr-2">
-                                                {iconMap[item.icon_name] || <Building size={24} />}
+                                                {iconMap[item.icon_name] || <FaBuilding size={24} />}
                                             </span>
                                             <span>Milestone Achieved</span>
                                         </div>
@@ -135,7 +136,7 @@ const History = () => {
                         to="/admissions"
                         className="inline-flex items-center bg-white text-secondary font-bold px-10 py-4 rounded-full hover:bg-primary hover:text-white transition-all transform hover:scale-105 shadow-lg"
                     >
-                        Apply for Admission <ArrowRight className="ml-2" size={20} />
+                        Apply for Admission <FaArrowRight className="ml-2" size={20} />
                     </Link>
                 </div>
             </section>

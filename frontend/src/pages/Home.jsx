@@ -4,25 +4,29 @@ import aboutImage1 from "../images/Home/about1.JPG";
 import aboutImage2 from "../images/Home/about2.JPG";
 import aboutImage3 from "../images/Home/about3.JPG";
 import {
-  ArrowRight,
-  BookOpen,
-  Trophy,
-  Users,
-  Calendar,
-  Star,
-  CheckCircle,
-  Zap,
-  ChevronLeft,
-  ChevronRight,
-  GraduationCap,
-  Palette,
-  Music,
-  Heart,
-  Smile,
-  CreditCard,
-} from "lucide-react";
+  FaArrowRight,
+  FaBookOpen,
+  FaTrophy,
+  FaUsers,
+  FaCalendarAlt,
+  FaStar,
+  FaCheckCircle,
+  FaBolt,
+  FaChevronLeft,
+  FaChevronRight,
+  FaGraduationCap,
+  FaPalette,
+  FaMusic,
+  FaHeart,
+  FaSmile,
+  FaCreditCard,
+} from "react-icons/fa";
 
 import { API_BASE_URL } from "../api/config";
+import achivementImage from "../images/Home/achivement (1).jpg";
+import achivementImage2 from "../images/Home/achivement (2).jpg";
+import achivementImage3 from "../images/Home/achivement (3).jpg";
+import achivementImage4 from "../images/Home/achivement (4).jpg";
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,15 +42,15 @@ const Home = () => {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchHomeData = async () => {
       try {
-        const [heroRes, aboutRes, teamRes, facilitiesRes, eventsRes, achievementsRes, testimonialsRes] = await Promise.all([
+        const [heroRes, aboutRes, teamRes, facilitiesRes, galleryRes, testimonialsRes] = await Promise.all([
           fetch(`${API_BASE_URL}/api/core/hero-videos/current/`),
           fetch(`${API_BASE_URL}/api/core/home-about/current/`),
           fetch(`${API_BASE_URL}/api/core/team/`),
           fetch(`${API_BASE_URL}/api/core/facilities/`),
-          fetch(`${API_BASE_URL}/api/gallery/events/`),
-          fetch(`${API_BASE_URL}/api/gallery/achievements/`),
+          fetch(`${API_BASE_URL}/api/gallery/items/`),
           fetch(`${API_BASE_URL}/api/core/testimonials/`)
         ]);
 
@@ -70,14 +74,36 @@ const Home = () => {
           setFacilities(facilitiesData);
         }
 
-        if (eventsRes.ok) {
-          const eventsData = await eventsRes.json();
-          setEvents(eventsData);
-        }
+        if (galleryRes.ok) {
+          const galleryData = await galleryRes.json();
+          // Filter events and achievements from the unified gallery items
+          const eventsData = galleryData.filter(item => item.category === 'Events');
+          const achievementsData = galleryData.filter(item => item.category === 'Achievements');
 
-        if (achievementsRes.ok) {
-          const achievementsData = await achievementsRes.json();
-          setAchievements(achievementsData);
+          setEvents(eventsData);
+          setAchievements([...achievementsData, {
+            title: "Excellence in Education Award 2024",
+            image: achivementImage,
+            date: "2022-03-15",
+            description: "Awarded for outstanding academic performance."
+          }, {
+            title: "Excellence in Education Award 2024",
+            image: achivementImage2,
+            date: "2023-03-15",
+            description: "Awarded for outstanding academic performance."
+          },
+          {
+            title: "Excellence in Education Award 2024",
+            image: achivementImage3,
+            date: "2024-03-15",
+            description: "Awarded for outstanding academic performance."
+          },
+          {
+            title: "Excellence in Education Award 2024",
+            image: achivementImage4,
+            date: "2025-03-15",
+            description: "Awarded for outstanding academic performance."
+          }]);
         }
 
         if (testimonialsRes.ok) {
@@ -93,18 +119,18 @@ const Home = () => {
 
   // Icon mapping for facilities
   const iconMap = {
-    Zap: <Zap size={32} />,
-    BookOpen: <BookOpen size={32} />,
-    Trophy: <Trophy size={32} />,
-    Users: <Users size={32} />,
-    Smile: <Smile size={32} />,
-    Calendar: <Calendar size={32} />,
-    GraduationCap: <GraduationCap size={32} />,
-    CreditCard: <CreditCard size={32} />,
-    Star: <Star size={32} />,
-    Heart: <Heart size={32} />,
-    Palette: <Palette size={32} />,
-    Music: <Music size={32} />,
+    Zap: <FaBolt size={32} />,
+    BookOpen: <FaBookOpen size={32} />,
+    Trophy: <FaTrophy size={32} />,
+    Users: <FaUsers size={32} />,
+    Smile: <FaSmile size={32} />,
+    Calendar: <FaCalendarAlt size={32} />,
+    GraduationCap: <FaGraduationCap size={32} />,
+    CreditCard: <FaCreditCard size={32} />,
+    Star: <FaStar size={32} />,
+    Heart: <FaHeart size={32} />,
+    Palette: <FaPalette size={32} />,
+    Music: <FaMusic size={32} />,
   };
 
   // Auto-slide effect for events
@@ -239,7 +265,7 @@ const Home = () => {
               heroVideo?.title || (
                 <>
                   Welcome to <br />
-                  <span className="text-primary">Nethaji Vidyalayam</span>
+                  <span className="text-primary">Nethaji Vidhyalayam</span>
                 </>
               )
             )}
@@ -264,7 +290,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Link to="/admissions" className="flex items-center gap-4 bg-gray-100 p-5 rounded-xl hover:bg-gray-200 transition-all group border border-gray-200">
               <div className="bg-white text-primary p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                <GraduationCap size={24} />
+                <FaGraduationCap size={24} />
               </div>
               <div>
                 <h3 className="font-bold text-lg">Admissions</h3>
@@ -274,7 +300,7 @@ const Home = () => {
 
             <Link to="/pay-fees" className="flex items-center gap-4 bg-gray-100 p-5 rounded-xl hover:bg-gray-200 transition-all group border border-gray-200">
               <div className="bg-white text-primary p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                <CreditCard size={24} />
+                <FaCreditCard size={24} />
               </div>
               <div>
                 <h3 className="font-bold text-lg">Pay Fees</h3>
@@ -284,7 +310,7 @@ const Home = () => {
 
             <Link to="/events" className="flex items-center gap-4 bg-gray-100 p-5 rounded-xl hover:bg-gray-200 transition-all group border border-gray-200">
               <div className="bg-white text-primary p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                <Calendar size={24} />
+                <FaCalendarAlt size={24} />
               </div>
               <div>
                 <h3 className="font-bold text-lg">School Calendar</h3>
@@ -294,7 +320,7 @@ const Home = () => {
 
             <Link to="/contact" className="flex items-center gap-4 bg-gray-100 p-5 rounded-xl hover:bg-gray-200 transition-all group border border-gray-200">
               <div className="bg-white text-primary p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                <Users size={24} />
+                <FaUsers size={24} />
               </div>
               <div>
                 <h3 className="font-bold text-lg">Contact Us</h3>
@@ -351,7 +377,7 @@ const Home = () => {
                       </p>
 
                       <p>
-                        From <strong>UKG</strong>, <strong>LKG</strong> to 5th grade, the
+                        From <strong>Pre KG</strong> to <strong>5th Grade</strong> the
                         aim of the school is to lay emphasis on experiential learning
                         and grooming of young children thereby making them responsible
                         citizens and leaders with a difference.
@@ -365,7 +391,7 @@ const Home = () => {
                     to={homeAbout?.button_link || "/about"}
                     className="inline-flex items-center gap-2 bg-brand-navy hover:bg-primary text-white px-10 py-4 rounded font-bold transition-all shadow-lg"
                   >
-                    {homeAbout?.button_text || "Discover Our Story"} <ArrowRight size={20} />
+                    {homeAbout?.button_text || "Discover Our Story"} <FaArrowRight size={20} />
                   </Link>
                 </div>
               </div>
@@ -413,7 +439,7 @@ const Home = () => {
                 {/* Excellence Badge */}
                 <div className="absolute -bottom-8 -right-4 lg:-right-8 bg-white p-6 rounded-3xl shadow-2xl border border-gray-100 flex items-center gap-4 z-30">
                   <div className="bg-primary/10 text-primary p-4 rounded-2xl">
-                    <Trophy size={24} />
+                    <FaTrophy size={24} />
                   </div>
                   <div>
                     <h4 className="font-bold text-brand-navy text-lg uppercase tracking-tight">Excellence</h4>
@@ -447,7 +473,7 @@ const Home = () => {
               Leadership & Guidance
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-24">
             {(teamMembers.length > 0 ? teamMembers : [
               {
                 name: "Saint John Bosco",
@@ -465,23 +491,31 @@ const Home = () => {
                 photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
               },
             ]).map((leader, index) => (
-              <div
-                key={index}
-                className="bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg hover:bg-white/20 transition-all text-center group border border-white/10"
-              >
-                <div className="w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/20 group-hover:border-primary transition-colors">
+              <div key={index} className="relative group mt-12">
+                {/* Image - Placed OUTSIDE the masked container */}
+                <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 group-hover:border-primary transition-colors shadow-lg z-20">
                   <img
                     src={leader.photo ? (leader.photo.startsWith('http') ? leader.photo : `${API_BASE_URL}${leader.photo}`) : "https://via.placeholder.com/150"}
                     alt={leader.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-1">
-                  {leader.name}
-                </h3>
-                <p className="text-primary font-medium uppercase text-sm tracking-wider">
-                  {leader.role}
-                </p>
+
+                {/* Card Content - Mask applied here */}
+                <div
+                  className="relative bg-white/5 backdrop-blur-md pt-24 pb-8 px-6 rounded-xl text-center hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 drop-shadow-xl z-10"
+                  style={{
+                    maskImage: 'radial-gradient(circle at top center, transparent 4rem, black 4rem)',
+                    WebkitMaskImage: 'radial-gradient(circle at top center, transparent 4.4rem, black 4rem)'
+                  }}
+                >
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {leader.name}
+                  </h3>
+                  <p className="text-primary font-medium uppercase text-sm tracking-wider">
+                    {leader.role}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -502,7 +536,7 @@ const Home = () => {
             </div>
             <div>
               <Link to="/facilities" className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all underline underline-offset-4">
-                Explore All Facilities <ArrowRight size={20} />
+                Explore All Facilities <FaArrowRight size={20} />
               </Link>
             </div>
           </div>
@@ -514,7 +548,7 @@ const Home = () => {
                 className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group hover:-translate-y-1"
               >
                 <div className="bg-gray-50 text-primary w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300 shadow-inner">
-                  {iconMap[facility.icon_name] || <Star size={32} />}
+                  {iconMap[facility.icon_name] || <FaStar size={32} />}
                 </div>
                 <h3 className="text-xl font-bold text-brand-navy mb-4">
                   {facility.title}
@@ -576,14 +610,14 @@ const Home = () => {
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all"
               aria-label="Previous"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <FaChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all"
               aria-label="Next"
             >
-              <ChevronRight className="w-6 h-6" />
+              <FaChevronRight className="w-6 h-6" />
             </button>
           </div>
 
@@ -627,14 +661,14 @@ const Home = () => {
               className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all"
               aria-label="Previous"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <FaChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all"
               aria-label="Next"
             >
-              <ChevronRight className="w-5 h-5" />
+              <FaChevronRight className="w-5 h-5" />
             </button>
           </div>
 
@@ -685,7 +719,7 @@ const Home = () => {
               Achievements & Accolades
             </h2>
           </div>
-          {/* Desktop view - 3 cards sliding */}
+
           <div className="hidden md:block relative">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {getVisibleAchievements().map((achievement, index) => (
@@ -694,13 +728,13 @@ const Home = () => {
                   className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer"
                 >
                   <img
-                    src={achievement.image ? (achievement.image.startsWith('http') ? achievement.image : `${API_BASE_URL}${achievement.image}`) : "https://via.placeholder.com/600x400"}
+                    src={achievement.image ? (achievement.image.startsWith('http') || achievement.image.startsWith('/src') ? achievement.image : `${API_BASE_URL}${achievement.image}`) : "https://via.placeholder.com/600x400"}
                     alt={achievement.title}
-                    className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
                     <span className="text-primary font-bold text-sm mb-1">
-                      {achievement.year}
+                      {achievement.date ? new Date(achievement.date).getFullYear() : ''}
                     </span>
                     <h3 className="text-white text-xl font-bold">
                       {achievement.title}
@@ -710,24 +744,22 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Navigation Arrows */}
             <button
               onClick={prevAchievementsSlide}
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-gray-200 hover:bg-gray-300 p-3 rounded-full transition-all"
               aria-label="Previous"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <FaChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={nextAchievementsSlide}
               className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-gray-200 hover:bg-gray-300 p-3 rounded-full transition-all"
               aria-label="Next"
             >
-              <ChevronRight className="w-6 h-6" />
+              <FaChevronRight className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Mobile view - 1 card at a time */}
           <div className="md:hidden relative">
             <div className="overflow-hidden">
               <div
@@ -740,13 +772,13 @@ const Home = () => {
                   <div key={index} className="w-full shrink-0 px-4">
                     <div className="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer">
                       <img
-                        src={achievement.image ? (achievement.image.startsWith('http') ? achievement.image : `${API_BASE_URL}${achievement.image}`) : "https://via.placeholder.com/600x400"}
+                        src={achievement.image ? (achievement.image.startsWith('http') || achievement.image.startsWith('/src') ? achievement.image : `${API_BASE_URL}${achievement.image}`) : "https://via.placeholder.com/600x400"}
                         alt={achievement.title}
                         className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
                         <span className="text-primary font-bold text-sm mb-1">
-                          {achievement.year}
+                          {achievement.date ? new Date(achievement.date).getFullYear() : ''}
                         </span>
                         <h3 className="text-white text-xl font-bold">
                           {achievement.title}
@@ -758,24 +790,22 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Mobile Navigation */}
             <button
               onClick={prevAchievementsSlide}
               className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full transition-all"
               aria-label="Previous"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <FaChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={nextAchievementsSlide}
               className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full transition-all"
               aria-label="Next"
             >
-              <ChevronRight className="w-5 h-5" />
+              <FaChevronRight className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Dots Indicator */}
           <div className="flex justify-center gap-2 mt-8">
             {achievements.map((_, index) => (
               <button
@@ -790,7 +820,6 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Auto-play toggle */}
           <div className="text-center mt-6">
             <button
               onClick={() =>
@@ -813,7 +842,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h4 className="text-primary font-bold uppercase tracking-widest mb-2">
@@ -857,7 +886,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section - Clean & High Conversion */}
       <section className="py-24 bg-brand-navy text-white relative overflow-hidden">
@@ -882,7 +911,7 @@ const Home = () => {
                 to="/contact"
                 className="bg-primary hover:bg-orange-600 text-white px-10 py-5 rounded font-bold text-lg transition-all shadow-xl hover:-translate-y-1 flex items-center justify-center gap-2"
               >
-                Contact Us Today <ArrowRight size={20} />
+                Contact Us Today <FaArrowRight size={20} />
               </Link>
               <Link
                 to="/admissions"
@@ -899,3 +928,4 @@ const Home = () => {
 };
 
 export default Home;
+// fixed ArrowRight reference

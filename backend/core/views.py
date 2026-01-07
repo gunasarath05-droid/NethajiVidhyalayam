@@ -16,7 +16,7 @@ class HeroVideoViewSet(viewsets.ReadOnlyModelViewSet):
         if hero:
             serializer = self.get_serializer(hero)
             return Response(serializer.data)
-        return Response({"detail": "No active hero video found."}, status=404)
+        return Response({})
 
 class HomeAboutViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = HomeAbout.objects.filter(is_active=True).order_by('-updated_at')
@@ -28,7 +28,7 @@ class HomeAboutViewSet(viewsets.ReadOnlyModelViewSet):
         if about:
             serializer = self.get_serializer(about)
             return Response(serializer.data)
-        return Response({"detail": "No active about section found."}, status=404)
+        return Response({})
 
 class TeamMemberViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TeamMember.objects.filter(is_active=True).order_by('order', 'created_at')
@@ -52,7 +52,7 @@ class AboutPageContentViewSet(viewsets.ReadOnlyModelViewSet):
         if content:
             serializer = self.get_serializer(content)
             return Response(serializer.data)
-        return Response({"detail": "Not found."}, status=404)
+        return Response({})
 
 class CoreValueViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CoreValue.objects.filter(is_active=True).order_by('order')
@@ -68,7 +68,7 @@ class HistoryPageContentViewSet(viewsets.ReadOnlyModelViewSet):
         if content:
             serializer = self.get_serializer(content)
             return Response(serializer.data)
-        return Response({"detail": "Not found."}, status=404)
+        return Response({})
 
 class MilestoneViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Milestone.objects.filter(is_active=True).order_by('order', 'year')
