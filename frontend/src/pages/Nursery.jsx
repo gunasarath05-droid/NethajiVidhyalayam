@@ -29,12 +29,15 @@ const Nursery = () => {
     ];
 
     const dailySchedule = [
-        { time: "8:30 - 9:00", activity: "Morning Assembly & Circle Time" },
-        { time: "9:00 - 10:00", activity: "Activity-Based Learning (Phonics, Numbers)" },
-        { time: "10:00 - 10:30", activity: "Snack Time & Free Play" },
-        { time: "10:30 - 11:30", activity: "Art, Craft & Music" },
-        { time: "11:30 - 12:00", activity: "Outdoor Play & Physical Activities" },
-        { time: "12:00 - 12:30", activity: "Story Time & Closing Circle" }
+        { time: "8:50 - 9:10", activity: "Morning Assembly" },
+        { time: " 9:10 - 10:00 ", activity: "Circle Time & Recap" },
+        { time: "10:00 - 10:30 ", activity: "Snack Time & Free Play" },
+        { time: "10:30 - 11:30 ", activity: "Activity-Based Learning (Phonics, Numbers)" },
+        { time: "11:30 - 12:00 ", activity: "Writing Practice" },
+        { time: "12:00 – 01.00  ", activity: "Lunch break" },
+        { time: "01.00 - 02.00", activity: "Story Time" },
+        { time: "02:00 - 03:00", activity: "Outdoor Play & Physical Activities" },
+        { time: "03:00 - 03:30", activity: "Recap of the day" }
     ];
 
     return (
@@ -47,7 +50,7 @@ const Nursery = () => {
                     style={{ backgroundImage: "url('https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
                 ></div>
                 <div className="relative z-20 container mx-auto px-4 text-center">
-                    <h1 className="text-5xl font-bold mb-4">Nursery (Pre-KG - UKG)</h1>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Nursery (Pre-KG - UKG)</h1>
                     <p className="text-xl text-gray-200">Where Little Learners Begin Their Journey</p>
                 </div>
             </section>
@@ -58,28 +61,30 @@ const Nursery = () => {
                     <div className="flex flex-col lg:flex-row items-center gap-16">
                         <div className="lg:w-1/2">
                             <h4 className="text-primary font-bold uppercase tracking-widest mb-2">Early Education</h4>
-                            <h2 className="text-4xl font-bold text-secondary mb-6">A Foundation for Lifelong Learning</h2>
+                            <h2 className="text-4xl font-bold text-secondary mb-6">A Joyful Beginning to Lifelong Learning</h2>
                             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                                Our Nursery program (Pre-KG, LKG, UKG) is designed to provide a warm, nurturing environment where young children can explore, discover, and grow. We believe that the early years are critical for building a strong foundation in academics, social skills, and emotional well-being.
+                                We create a nurturing environment where children feel safe, loved, and confident—allowing learning to happen naturally through meaningful experiences.
                             </p>
                             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                                Through a blend of Montessori and play-based learning methods, we encourage curiosity, creativity, and confidence in every child.
+                                <strong>Shishuvatika</strong> is the foundational stage of learning where a child’s educational journey begins with care, play, and joyful exploration. At our school, Shishuvatika is thoughtfully designed to support the holistic development of every child, guided by the timeless Panchakosha principles.
                             </p>
-                            <div className="flex gap-4">
-                                <div className="bg-primary/10 p-4 rounded-lg">
-                                    <span className="block text-3xl font-bold text-primary">1:10</span>
-                                    <span className="text-sm text-gray-600">Teacher Ratio</span>
-                                </div>
-                                <div className="bg-secondary/10 p-4 rounded-lg">
-                                    <span className="block text-3xl font-bold text-secondary">100+</span>
-                                    <span className="text-sm text-gray-600">Happy Kids</span>
-                                </div>
+
+                            <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-primary mb-6">
+                                <h3 className="text-xl font-bold text-secondary mb-3">Meaning of Shishuvatika</h3>
+                                <ul className="space-y-2 mb-4">
+                                    <li className="text-gray-700"><span className="font-bold text-primary">• Shishu</span> → Child / Infant</li>
+                                    <li className="text-gray-700"><span className="font-bold text-primary">• Vatika</span> → Garden / Nursery / Place of growth</li>
+                                </ul>
+                                <p className="text-gray-600 italic">
+                                    Shishuvatika means “Children’s Garden”—a space where young minds blossom through care, play, values, and joyful learning.
+                                </p>
                             </div>
                         </div>
                         <div className="lg:w-1/2">
                             <img
-                                src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                src="../src/images/C0471T01.JPG"
                                 alt="Nursery Classroom"
+                                loading="lazy"
                                 className="rounded-2xl shadow-2xl"
                             />
                         </div>

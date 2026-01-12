@@ -115,7 +115,7 @@ const AdmissionEnquiry = () => {
             <section className="relative h-[300px] flex items-center justify-center text-center text-white bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1544531696-297f0a8a927d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}>
                 <div className="absolute inset-0 bg-secondary/80 z-10" />
                 <div className="relative z-20 container mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Admission Enquiry</h1>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Admission Enquiry</h1>
                     <p className="text-xl max-w-2xl mx-auto text-gray-200">Start your child's journey with Nethaji Vidyalayam.</p>
                 </div>
             </section>

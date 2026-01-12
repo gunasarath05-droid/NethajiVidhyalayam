@@ -69,7 +69,7 @@ const FeeStructure = () => {
             {/* Minimal Header */}
             <section className="bg-secondary text-white py-20 text-center">
                 <div className="container mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Fee Structure</h1>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Fee Structure</h1>
                     <p className="text-xl text-gray-300">Transparent pricing for world-class education. Academic Year 2024-2025.</p>
                 </div>
             </section>

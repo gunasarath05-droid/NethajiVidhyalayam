@@ -39,8 +39,8 @@ const Login = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-secondary via-primary to-purple-600 flex items-center justify-center p-4">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 right-0 w-72 h-72 md:w-96 md:h-96 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-72 h-72 md:w-96 md:h-96 bg-white/10 rounded-full blur-3xl"></div>
 
             <div className="w-full max-w-md relative z-10">
                 {/* Logo/Header */}
@@ -54,7 +54,7 @@ const Login = () => {
                             <div className="text-sm text-gray-200 tracking-wider">VIDYALAYAM</div>
                         </div>
                     </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Welcome Back</h1>
                     <p className="text-gray-200">Login to access your portal</p>
                 </div>
 
@@ -169,7 +169,7 @@ const Login = () => {
 
                 {/* Help Text */}
                 <p className="text-center text-sm text-gray-200 mt-6">
-                    Need help? Contact <a href="tel:+919876543210" className="text-white font-bold hover:underline">+91 98765 43210</a>
+                    Need help? Contact <a href="tel:+919444662737" className="text-white font-bold hover:underline">+91 94446 62737</a>
                 </p>
             </div>
         </div>

@@ -56,7 +56,7 @@ const About = () => {
                     <h4 className="text-primary font-bold uppercase tracking-widest mb-4">
                         {content?.hero_sub_title || "Who We Are"}
                     </h4>
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
                         {content?.hero_title ? (
                             <>
                                 {content.hero_title.split(' Excellence')[0]} <span className="text-primary">Excellence</span>
@@ -118,6 +118,7 @@ const About = () => {
                             <img
                                 src={content?.story_image ? (content.story_image.startsWith('http') ? content.story_image : `${API_BASE_URL}${content.story_image}`) : "https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
                                 alt="Our Story"
+                                loading="lazy"
                                 className="rounded-2xl shadow-2xl relative z-10 w-full"
                             />
                         </div>
@@ -136,7 +137,7 @@ const About = () => {
                             </div>
                             <h3 className="text-2xl font-bold text-secondary mb-4">Our Vision</h3>
                             <p className="text-gray-600 leading-relaxed text-lg">
-                                {content?.vision_text || "             Holistic development of the student into a responsible, morally upright citizen capable of thinking, learning and striving for national development."}
+                                {content?.vision_text || "Holistic development of the student into a responsible, morally upright citizen capable of thinking, learning and striving for national development."}
                             </p>
                         </div>
 
@@ -200,6 +201,7 @@ const About = () => {
                         <img
                             src={content?.principal_image ? (content.principal_image.startsWith('http') ? content.principal_image : `${API_BASE_URL}${content.principal_image}`) : principalFallback}
                             alt="Principal"
+                            loading="lazy"
                             className="w-48 h-48 rounded-full object-cover border-4 border-primary shadow-lg"
                         />
                         <div className="text-left">

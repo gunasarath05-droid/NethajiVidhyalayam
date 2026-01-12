@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-h!prwy7xty)d9btpn$%9jbrlxt76jqr%-k@)a^3quf61mr)c++
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['api.nethajividhyalayam.com', '*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,7 +66,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True # For development
+# CORS_ALLOW_ALL_ORIGINS = True # For development
+CORS_ALLOWED_ORIGINS = [
+    "http://nethajividhyalayam.com",
+    "https://nethajividhyalayam.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://nethajividhyalayam.com",
+    "https://nethajividhyalayam.com",
+]
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -140,3 +150,118 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Jazzmin Settings
+JAZZMIN_SETTINGS = {
+    "site_title": "Nethaji Admin",
+    "site_header": "Nethaji Vidyalayam",
+    "site_brand": "Nethaji Admin",
+    "welcome_sign": "Welcome to Nethaji Vidyalayam Admin Panel",
+    "copyright": "Nethaji Vidyalayam",
+    "search_model": "admissions.AdmissionInquiry",
+    "user_avatar": None,
+
+    # Top Menu - Acts as Quick Links/Widgets
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "View Website", "url": "/"},
+        {"name": "Admissions", "url": "admin:admissions_admissioninquiry_changelist"},
+    ],
+
+    # User Menu
+    "usermenu_links": [
+        {"model": "auth.user"}
+    ],
+
+    # Side Menu
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+
+    # Order of apps in the sidebar - Prioritizing key modules
+    "order_with_respect_to": [
+        "admissions",
+        "faculty",
+        "core",
+        "facilities",
+        "events",
+        "gallery",
+        "contact",
+        "auth"
+    ],
+
+    # Custom icons for models (FontAwesome)
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        
+        # Core
+        "core.HeroVideo": "fas fa-video",
+        "core.TeamMember": "fas fa-user-tie",
+        "core.Facility": "fas fa-building",
+        "core.Testimonial": "fas fa-comment-dots",
+        "core.AboutPageContent": "fas fa-info-circle",
+        "core.CoreValue": "fas fa-heart",
+        "core.HistoryPageContent": "fas fa-history",
+        "core.Milestone": "fas fa-flag",
+
+        # Admissions
+        "admissions.AdmissionInquiry": "fas fa-user-graduate",
+        "admissions.AdmissionsPageContent": "fas fa-file-alt",
+        "admissions.AgeCriterion": "fas fa-birthday-cake",
+        "admissions.RequiredDocument": "fas fa-file-contract",
+
+        # Faculty
+        "faculty.FacultyMember": "fas fa-chalkboard-teacher",
+        "faculty.Department": "fas fa-university",
+        "faculty.Leadership": "fas fa-user-shield",
+        "faculty.FacultyPageContent": "fas fa-edit",
+
+        # Facilities
+        "facilities.Facility": "fas fa-tools",
+        "facilities.FacilityStat": "fas fa-chart-bar",
+        "facilities.FacilitiesPageContent": "fas fa-images",
+        "facilities.FacilityTestimonial": "fas fa-quote-right",
+        "facilities.Certification": "fas fa-certificate",
+        
+        # Events
+        "events.Event": "fas fa-calendar-alt",
+        
+        # Contact
+        "contact.Message": "fas fa-envelope",
+        "contact.CareerApplication": "fas fa-briefcase",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": False,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-orange",
+    "accent": "accent-primary",
+    "navbar": "navbar-orange navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "theme": "default",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}

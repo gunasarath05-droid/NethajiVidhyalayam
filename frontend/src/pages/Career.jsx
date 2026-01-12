@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaBriefcase, FaUpload, FaSpinner, FaCheckCircle } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from '../api/config';
 
 const Career = () => {
@@ -54,7 +56,7 @@ const Career = () => {
         if (formData.resume) {
             data.append('resume', formData.resume);
         } else {
-            alert("Please upload your resume.");
+            toast.error("Please upload your resume.");
             setIsSubmitting(false);
             return;
         }
@@ -66,16 +68,17 @@ const Career = () => {
             });
 
             if (response.ok) {
+                toast.success('Application submitted successfully!');
                 setIsSuccess(true);
                 window.scrollTo(0, 0);
             } else {
                 const errorData = await response.json();
                 console.error("Submission error", errorData);
-                alert("Something went wrong. Please check your inputs.");
+                toast.error("Something went wrong. Please check your inputs.");
             }
         } catch (error) {
             console.error("Error submitting application:", error);
-            alert("Connection error. Please check your internet.");
+            toast.error("Connection error. Please check your internet.");
         } finally {
             setIsSubmitting(false);
         }
@@ -84,6 +87,7 @@ const Career = () => {
     if (isSuccess) {
         return (
             <div className="font-sans bg-gray-50 min-h-screen flex items-center justify-center px-4">
+                <ToastContainer position="top-right" autoClose={3000} />
                 <div className="bg-white p-12 rounded-3xl shadow-2xl text-center max-w-lg w-full transform transition-all animate-fade-in-up">
                     <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
                         <FaCheckCircle size={64} />
@@ -114,11 +118,12 @@ const Career = () => {
 
     return (
         <div className="font-sans bg-gray-50 min-h-screen">
+            <ToastContainer position="top-right" autoClose={3000} />
             {/* Hero Section */}
             <section className="relative h-[300px] flex items-center justify-center text-center text-white bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}>
                 <div className="absolute inset-0 bg-primary/80 z-10" />
                 <div className="relative z-20 container mx-auto px-4">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Join Our Team</h1>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Join Our Team</h1>
                     <p className="text-xl max-w-2xl mx-auto text-gray-200">Shape the future with us at Nethaji Vidyalayam.</p>
                 </div>
             </section>

@@ -170,7 +170,7 @@ const Curriculum = () => {
         },
         {
             level: "Secondary Stage (Grade 1 to 5)",
-            focus: "CBSE Board Preparation, Core Academics, Life Skills, Holistic Growth",
+            focus: "Core Academics, Life Skills, Holistic Growth",
             color: "bg-orange-50 border-orange-200",
             btnColor: "text-orange-600",
             details: [
@@ -178,7 +178,7 @@ const Curriculum = () => {
                 { category: "Mathematics", items: "Arithmetic operations, Geometry, Data handling, Word problems" },
                 { category: "EVS / Science", items: "Grades 1-3: Environmental Studies; Grades 4-5: General Science" },
                 { category: "Social Studies", items: "Grades 4-5: History, Geography, Civics, Indian Heritage" },
-                { category: "ICT & Coding", items: "Digital literacy, basic programming concepts" },
+                // { category: "ICT & Coding", items: "Digital literacy, basic programming concepts" },
                 { category: "Life Skills", items: "Value education, personality development, leadership" },
                 { category: "Extracurricular", items: "Yoga, Performing Arts, Sports, Science Club" }
             ]
@@ -253,8 +253,8 @@ const Curriculum = () => {
                     <div className="grid gap-6">
                         {curriculumStages.map((stage, index) => (
                             <div key={index} className={`rounded-2xl border transition-all duration-300 ${stage.color} ${expandedStage === index ? 'shadow-md scale-[1.01]' : 'shadow-sm hover:shadow-md'}`}>
-                                <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-                                    <div className="flex-1 text-center md:text-left">
+                                <div className="p-6 lg:p-8 flex flex-col lg:flex-row items-center gap-6">
+                                    <div className="flex-1 text-center lg:text-left">
                                         <h3 className="text-2xl font-bold text-gray-800 mb-2">{stage.level}</h3>
                                         <p className="text-gray-600 font-medium">{stage.focus}</p>
                                     </div>
@@ -268,7 +268,7 @@ const Curriculum = () => {
                                 </div>
 
                                 {expandedStage === index && stage.details && stage.details.length > 0 && (
-                                    <div className="px-6 md:px-8 pb-8 pt-2 border-t border-gray-200/50">
+                                    <div className="px-6 lg:px-8 pb-8 pt-2 border-t border-gray-200/50">
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                                             {stage.details.map((detail, idx) => (
                                                 <div key={idx} className="bg-white/60 p-4 rounded-xl border border-gray-100">

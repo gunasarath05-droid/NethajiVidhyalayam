@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock, FaPaperPlane, FaUser, FaComment, FaArrowRight } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { API_BASE_URL } from '../api/config';
 
@@ -33,14 +35,14 @@ const ContactUs = () => {
             });
 
             if (response.ok) {
-                alert('Thank you! We will get back to you soon.');
+                toast.success('Message submitted successfully!');
                 setFormData({ name: '', email: '', phone: '', subject: 'general', message: '' });
             } else {
-                alert('Something went wrong. Please try again.');
+                toast.error('Something went wrong. Please try again.');
             }
         } catch (error) {
             console.error('Error submitting form:', error);
-            alert('Connection error. Please check your internet.');
+            toast.error('Connection error. Please check your internet.');
         } finally {
             setIsSubmitting(false);
         }
@@ -78,6 +80,7 @@ const ContactUs = () => {
 
     return (
         <div className="font-sans bg-gray-50">
+            <ToastContainer position="top-right" autoClose={3000} />
             {/* Centered Hero */}
             <section className="relative bg-gradient-to-br from-secondary via-primary to-purple-600 text-white py-32 overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
@@ -96,7 +99,7 @@ const ContactUs = () => {
             {/* Contact Method Cards */}
             <section className="py-12 -mt-20 relative z-20">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {contactMethods.map((method, index) => (
                             <div key={index} className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:-translate-y-2 transition-transform duration-300">
                                 <div className={`bg-gradient-to-r ${method.gradient} p-8 text-white text-center`}>
@@ -265,18 +268,18 @@ const ContactUs = () => {
                     <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                         <div>
                             <FaClock className="mb-4" size={48} />
-                            <h3 className="text-3xl font-bold mb-2">We're Open!</h3>
+                            <h3 className="text-3xl font-bold mb-2 uppercase">We're Open!</h3>
                             <p className="text-gray-300">Visit us during office hours or call for appointments.</p>
                         </div>
                         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 min-w-[300px]">
                             <div className="space-y-3 text-lg">
                                 <div className="flex justify-between border-b border-white/20 pb-2">
                                     <span>Mon - Fri</span>
-                                    <span className="font-bold">8:00 AM - 4:00 PM</span>
+                                    <span className="font-bold">8:50 AM - 3:30 PM</span>
                                 </div>
                                 <div className="flex justify-between border-b border-white/20 pb-2">
                                     <span>Saturday</span>
-                                    <span className="font-bold">8:00 AM - 12:00 PM</span>
+                                    <span className="font-bold">8:50 AM - 3:30 PM</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span>Sunday</span>

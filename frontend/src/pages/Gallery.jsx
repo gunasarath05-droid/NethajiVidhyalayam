@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaCamera, FaSearchPlus, FaInfoCircle } from 'react-icons/fa';
-import api from '../api/axios';
+import api from '../api/config';
 import { API_BASE_URL } from '../api/config';
 
 const Gallery = () => {
@@ -57,7 +57,7 @@ const Gallery = () => {
         return (
             <div className="bg-gray-50 min-h-screen pb-16">
                 <div className="bg-[var(--color-brand-navy)] text-white py-12 px-6 text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 font-serif">School Gallery</h1>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-serif">School Gallery</h1>
                     <p className="text-gray-200 max-w-2xl mx-auto text-lg opacity-90">
                         A glimpse into the vibrant life at Nethaji Vedhyalayam.
                     </p>
@@ -73,7 +73,7 @@ const Gallery = () => {
         <div className="bg-gray-50 min-h-screen pb-16">
             {/* Header Section */}
             <div className="bg-[var(--color-brand-navy)] text-white py-12 px-6 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-serif">School Gallery</h1>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-serif">School Gallery</h1>
                 <p className="text-gray-200 max-w-2xl mx-auto text-lg opacity-90">
                     A glimpse into the vibrant life at Nethaji Vedhyalayam, from academic achievements to cultural celebrations.
                 </p>

@@ -63,7 +63,7 @@ const Primary = () => {
 
     const achievements = [
         { label: "100% Pass Rate", value: "5 Years Running" },
-        { label: "State Level Winners", value: "12 Students (2024)" },
+        // { label: "State Level Winners", value: "12 Students (2024)" },
         { label: "Reading Program", value: "500+ Books Read" }
     ];
 
@@ -77,7 +77,7 @@ const Primary = () => {
                     style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
                 ></div>
                 <div className="relative z-20 container mx-auto px-4 text-center">
-                    <h1 className="text-5xl font-bold mb-4">Primary School (Grade 1 - 5)</h1>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Primary School (Grade 1 - 5)</h1>
                     <p className="text-xl text-gray-200">Building Strong Academic Foundations</p>
                 </div>
             </section>
@@ -107,8 +107,9 @@ const Primary = () => {
                         </div>
                         <div className="lg:w-1/2">
                             <img
-                                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                src="../src/images/C0465T01.JPG"
                                 alt="Primary Classroom"
+                                loading="lazy"
                                 className="rounded-2xl shadow-2xl"
                             />
                         </div>
@@ -158,7 +159,7 @@ const Primary = () => {
                         <h2 className="text-3xl font-bold text-secondary mb-4">Our Teaching Approach</h2>
                         <p className="text-gray-600">Modern pedagogy for 21st-century learners.</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[
                             {
                                 title: "Experiential Learning",

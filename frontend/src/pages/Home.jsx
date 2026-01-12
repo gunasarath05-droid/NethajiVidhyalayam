@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import aboutImage1 from "../images/Home/about1.JPG";
+import aboutImage1 from "../images/Home/C0451T01.JPG";
 import aboutImage2 from "../images/Home/about2.JPG";
 import aboutImage3 from "../images/Home/about3.JPG";
+import heroFallbackVideo from "../images/Home/nethaji 2.mov";
 import {
   FaArrowRight,
   FaBookOpen,
@@ -226,7 +227,7 @@ const Home = () => {
     <div className="font-sans">
       {/* Hero Section */}
       {/* Hero Section - Professional & Static */}
-      <section className="relative h-[800px] flex items-center justify-center bg-brand-navy overflow-hidden">
+      <section className="relative h-[600px] md:h-[700px] lg:h-[800px] flex items-center justify-center bg-brand-navy overflow-hidden">
         {/* Background Video */}
         <div className="absolute inset-0 z-0">
           <video
@@ -240,8 +241,7 @@ const Home = () => {
             <source
               src={heroVideo?.video_file
                 ? (heroVideo.video_file.startsWith('http') ? heroVideo.video_file : `${API_BASE_URL}${heroVideo.video_file}`)
-                : (heroVideo?.video_url || "https://assets.mixkit.co/videos/preview/mixkit-children-walking-in-a-park-1175-large.mp4")
-              }
+                : (heroVideo?.video_url || heroFallbackVideo)}
               type="video/mp4"
             />
             Your browser does not support the video tag.
@@ -253,7 +253,7 @@ const Home = () => {
 
         {/* Content */}
         <div className="relative z-10 text-center text-white w-full max-w-7xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
             {heroVideo?.title?.includes("Nethaji") ? (
               heroVideo.title.split("Nethaji").map((part, i) => (
                 <React.Fragment key={i}>
@@ -287,7 +287,7 @@ const Home = () => {
       {/* Quick Info / Highlights Section */}
       <section className="py-12 bg-white text-brand-navy relative z-20 shadow-xl">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <Link to="/admissions" className="flex items-center gap-4 bg-gray-100 p-5 rounded-xl hover:bg-gray-200 transition-all group border border-gray-200">
               <div className="bg-white text-primary p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform">
                 <FaGraduationCap size={24} />
@@ -333,7 +333,7 @@ const Home = () => {
 
 
       {/* About Section - Simple & Professional */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-20 lg:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             {/* Text Side */}
@@ -399,7 +399,7 @@ const Home = () => {
 
             {/* Image Side - Modern Mosaic Grid Design */}
             <div className="lg:w-1/2">
-              <div className="grid grid-cols-12 gap-4 h-[500px] lg:h-[650px] relative">
+              <div className="grid grid-cols-12 gap-4 h-[400px] md:h-[500px] lg:h-[650px] relative">
                 {/* Decorative border accent */}
                 <div className="absolute -top-6 -right-6 w-32 h-32 border-t-8 border-r-8 border-primary/20 rounded-tr-[40px] hidden lg:block"></div>
 
@@ -409,6 +409,7 @@ const Home = () => {
                     <img
                       src={homeAbout?.image1 ? (homeAbout.image1.startsWith('http') ? homeAbout.image1 : `${API_BASE_URL}${homeAbout.image1}`) : aboutImage1}
                       alt="School Campus"
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
@@ -421,6 +422,7 @@ const Home = () => {
                       <img
                         src={homeAbout?.image2 ? (homeAbout.image2.startsWith('http') ? homeAbout.image2 : `${API_BASE_URL}${homeAbout.image2}`) : aboutImage2}
                         alt="Classroom"
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     </div>
@@ -430,6 +432,7 @@ const Home = () => {
                       <img
                         src={homeAbout?.image3 ? (homeAbout.image3.startsWith('http') ? homeAbout.image3 : `${API_BASE_URL}${homeAbout.image3}`) : aboutImage3}
                         alt="Laboratory"
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     </div>
@@ -456,7 +459,7 @@ const Home = () => {
 
       {/* Leadership Section */}
       {/* Leadership Section - Dark Blue Theme */}
-      <section className="py-20 bg-linear-to-b from-brand-navy to-[#1a1f5c] text-white relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-linear-to-b from-brand-navy to-[#1a1f5c] text-white relative overflow-hidden">
         {/* Decorative Vectors */}
         <div className="absolute top-0 right-0 p-10 opacity-10">
           <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor">
@@ -473,22 +476,22 @@ const Home = () => {
               Leadership & Guidance
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-12 md:gap-y-16 lg:gap-y-24">
             {(teamMembers.length > 0 ? teamMembers : [
               {
-                name: "Saint John Bosco",
-                role: "Founder",
-                photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-              },
-              {
-                name: "Rev. Fr. Xavier Packiam",
+                name: "Dr.M.B.KANNABIRAN",
                 role: "Correspondent",
-                photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                photo: "../images/Correspontent.jpg",
               },
               {
-                name: "Dr. R. Vijay Kumar",
+                name: "B.SEKAR",
+                role: "SECRETARY",
+                photo: "../images/Secretry.jpg",
+              },
+              {
+                name: "Dr.K. PRAMILA",
                 role: "Principal",
-                photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                photo: "../images/princi.jpg",
               },
             ]).map((leader, index) => (
               <div key={index} className="relative group mt-12">
@@ -497,6 +500,7 @@ const Home = () => {
                   <img
                     src={leader.photo ? (leader.photo.startsWith('http') ? leader.photo : `${API_BASE_URL}${leader.photo}`) : "https://via.placeholder.com/150"}
                     alt={leader.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>
@@ -523,7 +527,7 @@ const Home = () => {
       </section>
 
       {/* Facilities / Infrastructure Section - Refined */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-20 lg:py-24 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-2xl">
@@ -567,7 +571,7 @@ const Home = () => {
       {/* Stats Section */}
       {/* Latest Events Section */}
       {/* Latest Events Section - Vibrant Gradient */}
-      <section className="py-20 bg-brand-navy text-white overflow-hidden">
+      <section className="py-16 md:py-20 bg-brand-navy text-white overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h4 className="text-primary font-bold uppercase tracking-widest mb-2">
@@ -578,7 +582,7 @@ const Home = () => {
 
           {/* Desktop view - 3 cards sliding */}
           <div className="hidden md:block relative">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {getVisibleCards().map((event, index) => (
                 <div
                   key={`${currentIndex}-${index}`}
@@ -588,6 +592,7 @@ const Home = () => {
                     <img
                       src={event.image ? (event.image.startsWith('http') ? event.image : `${API_BASE_URL}${event.image}`) : "https://via.placeholder.com/800x600"}
                       alt={event.title}
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute top-4 left-4">
@@ -635,6 +640,7 @@ const Home = () => {
                         <img
                           src={event.image ? (event.image.startsWith('http') ? event.image : `${API_BASE_URL}${event.image}`) : "https://via.placeholder.com/800x600"}
                           alt={event.title}
+                          loading="lazy"
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute top-4 left-4">
@@ -709,7 +715,7 @@ const Home = () => {
       </section>
 
       {/* Achievements Section */}
-      <section className="py-20 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h4 className="text-primary font-bold uppercase tracking-widest mb-2">
@@ -721,7 +727,7 @@ const Home = () => {
           </div>
 
           <div className="hidden md:block relative">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {getVisibleAchievements().map((achievement, index) => (
                 <div
                   key={`${achievementsCurrentIndex}-${index}`}
@@ -730,6 +736,7 @@ const Home = () => {
                   <img
                     src={achievement.image ? (achievement.image.startsWith('http') || achievement.image.startsWith('/src') ? achievement.image : `${API_BASE_URL}${achievement.image}`) : "https://via.placeholder.com/600x400"}
                     alt={achievement.title}
+                    loading="lazy"
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
@@ -774,6 +781,7 @@ const Home = () => {
                       <img
                         src={achievement.image ? (achievement.image.startsWith('http') || achievement.image.startsWith('/src') ? achievement.image : `${API_BASE_URL}${achievement.image}`) : "https://via.placeholder.com/600x400"}
                         alt={achievement.title}
+                        loading="lazy"
                         className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
@@ -889,7 +897,7 @@ const Home = () => {
       </section> */}
 
       {/* CTA Section - Clean & High Conversion */}
-      <section className="py-24 bg-brand-navy text-white relative overflow-hidden">
+      <section className="py-16 md:py-20 lg:py-24 bg-brand-navy text-white relative overflow-hidden">
         {/* Subtle Brand Pattern */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="grid grid-cols-10 gap-x-12 h-full">

@@ -60,14 +60,14 @@ const Navbar = () => {
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 font-sans">
       {/* Top Bar */}
-      <div className="bg-primary text-white py-2 text-sm hidden md:block">
+      <div className="bg-primary text-white py-2 text-sm hidden lg:block">
         <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-6">
-            <a href="tel:+911234567890" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
-              <MdPhone size={16} /> +91 123 456 7890
+            <a href="tel:+919444662737" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
+              <MdPhone size={16} /> +91 9444662737 / 044-22772535
             </a>
-            <a href="mailto:info@nethajividyalayam.com" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
-              <MdEmail size={16} /> info@nethajividyalayam.com
+            <a href="mailto:nethajividhyalayam2016@gmail.com" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
+              <MdEmail size={16} /> nethajividhyalayam2016@gmail.com
             </a>
           </div>
           <div className="flex items-center space-x-4">
@@ -87,12 +87,12 @@ const Navbar = () => {
 
             <div className="flex flex-col">
               <span className="text-2xl font-bold text-secondary leading-tight">NETHAJI</span>
-              <span className="text-xl font-semibold text-primary tracking-wider">VIDYALAYAM</span>
+              <span className="text-xl font-semibold text-primary tracking-wider">VIDHYALAYAM</span>
             </div>
           </Link>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-1">
             {menuItems.map((item, index) => (
               <div key={index} className="relative group">
                 {item.submenu ? (
@@ -129,7 +129,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-700 hover:text-primary transition-colors"
+            className="lg:hidden text-gray-700 hover:text-primary transition-colors"
             onClick={toggleMenu}
           >
             {isOpen ? <MdClose size={28} /> : <MdMenu size={28} />}
@@ -139,14 +139,14 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        className={`lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
           }`}
         onClick={toggleMenu}
       />
 
       {/* Mobile Side Menu */}
       <div
-        className={`md:hidden fixed top-0 right-0 w-[80%] max-w-sm h-full bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`lg:hidden fixed top-0 right-0 w-[80%] max-w-sm h-full bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
       >
         <div className="p-5 border-b flex justify-between items-center">

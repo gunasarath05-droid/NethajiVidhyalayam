@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaArrowRight, FaTimes, FaFilter } from 'react-icons/fa';
-import api from '../api/axios';
+import api from '../api/config';
 import { API_BASE_URL } from '../api/config';
 
 const CATEGORIES = ["All", "Academic", "Sports", "Cultural", "Workshop", "Celebration"];
@@ -43,7 +43,7 @@ const Events = () => {
             <div className="relativePath relative h-[400px] bg-[var(--color-brand-navy)] overflow-hidden">
                 <div className="absolute inset-0 bg-black/40 z-10"></div>
                 <img
-                    src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=2070&auto=format&fit=crop"
+                    src="../src/images/C0475T01.JPG"
                     alt="Events Banner"
                     className="w-full h-full object-cover"
                 />
@@ -51,7 +51,7 @@ const Events = () => {
                     <span className="inline-block py-1 px-4 rounded-full bg-white/20 text-white backdrop-blur-sm text-lg font-semibold mb-4 animate-slide-up">
                         Nethaji Vedhyalayam
                     </span>
-                    <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 font-serif tracking-tight animate-slide-up" style={{ animationDelay: '100ms' }}>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-serif tracking-tight animate-slide-up" style={{ animationDelay: '100ms' }}>
                         Upcoming Events
                     </h1>
                     <p className="text-gray-200 text-lg md:text-xl max-w-2xl animate-slide-up opacity-90" style={{ animationDelay: '200ms' }}>
@@ -101,6 +101,7 @@ const Events = () => {
                                     <img
                                         src={event.image ? (event.image.startsWith('http') ? event.image : `${API_BASE_URL}${event.image}`) : 'https://via.placeholder.com/400x300'}
                                         alt={event.title}
+                                        loading="lazy"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
                                     <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl shadow-sm text-center min-w-[70px]">
@@ -187,6 +188,7 @@ const Events = () => {
                                 <img
                                     src={selectedEvent.image ? (selectedEvent.image.startsWith('http') ? selectedEvent.image : `${API_BASE_URL}${selectedEvent.image}`) : 'https://via.placeholder.com/400x300'}
                                     alt={selectedEvent.title}
+                                    loading="lazy"
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:hidden"></div>

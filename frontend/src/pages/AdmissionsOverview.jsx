@@ -74,7 +74,7 @@ const AdmissionsOverview = () => {
       {/* Intro / Philosophy */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-12">
+          <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-12">
             <div className="md:w-1/2">
               <h4 className="text-primary font-bold uppercase tracking-widest mb-2">
                 {pageContent?.why_sub_heading || "Why Choose Us?"}
@@ -104,6 +104,7 @@ const AdmissionsOverview = () => {
               <img
                 src={pageContent?.why_image ? (pageContent.why_image.startsWith('http') ? pageContent.why_image : `${API_BASE_URL}${pageContent.why_image}`) : "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
                 alt="Students Learning"
+                loading="lazy"
                 className="rounded-2xl shadow-2xl border-4 border-white"
               />
             </div>

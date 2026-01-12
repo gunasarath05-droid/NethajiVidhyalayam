@@ -44,21 +44,21 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admissions" className="flex items-center hover:text-primary transition-colors group">
+                                <Link to="/academics/nursery" className="flex items-center hover:text-primary transition-colors group">
                                     <FaChevronRight size={14} className="text-primary mr-2 group-hover:translate-x-1 transition-transform" />
                                     School Timing
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/academics" className="flex items-center hover:text-primary transition-colors group">
+                                <Link to="/facilities" className="flex items-center hover:text-primary transition-colors group">
                                     <FaChevronRight size={14} className="text-primary mr-2 group-hover:translate-x-1 transition-transform" />
-                                    Uniform
+                                    Facilities
                                 </Link>
                             </li>
                             <li>
                                 <Link to="/gallery" className="flex items-center hover:text-primary transition-colors group">
                                     <FaChevronRight size={14} className="text-primary mr-2 group-hover:translate-x-1 transition-transform" />
-                                    Attendance
+                                    Gallery
                                 </Link>
                             </li>
                             <li>
@@ -85,11 +85,13 @@ const Footer = () => {
                             </li>
                             <li className="flex items-center gap-3">
                                 <FaPhoneAlt size={20} className="text-primary shrink-0" />
-                                <a href="tel:+919876543210" className="text-sm text-gray-400 hover:text-primary transition-colors">+91 98765 43210</a>
+                                <a href="tel:+919444662737" className="text-sm text-gray-400 hover:text-primary transition-colors">+91 9444662737 / 044-22772535</a>
                             </li>
-                            <li className="flex items-center gap-3">
-                                <FaEnvelope size={20} className="text-primary shrink-0" />
-                                <a href="mailto:info@nethajividyalayam.edu.in" className="text-sm text-gray-400 hover:text-primary transition-colors">info@nethajividyalayam.edu.in</a>
+                            <li>
+                                <a href="mailto:nethajividhyalayam2016@gmail.com" className="flex items-center gap-3 group">
+                                    <FaEnvelope size={20} className="text-primary shrink-0" />
+                                    <span className="text-sm text-gray-400 group-hover:text-primary transition-colors">nethajividhyalayam2016@gmail.com</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -117,6 +119,7 @@ const Footer = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
                     <p>&copy; {new Date().getFullYear()} Nethaji Vidyalayam. All rights reserved.</p>
+                    <p>Designed & Developed By EC4You</p>
                     <div className="flex space-x-6 mt-4 md:mt-0">
                         <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
                         <a href="#" className="hover:text-white transition-colors">Terms of Service</a>

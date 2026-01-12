@@ -20,7 +20,7 @@ import {
     FaPrint
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
+import api from '../api/config';
 
 const AdminStaff = () => {
     const navigate = useNavigate();
@@ -418,7 +418,7 @@ const AdminStaff = () => {
                                 <p className="text-gray-500">Welcome back, here's what's happening today.</p>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <StatCard label="Total Students" value={students.length} icon={FaUsers} color="bg-blue-500" onClick={() => setActiveTab('students')} />
                                 <StatCard label="Admissions" value={enquiries.length} icon={FaComment} color="bg-orange-500" onClick={() => setActiveTab('enquiries')} />
                                 <StatCard label="Events" value={events.length} icon={FaCalendarAlt} color="bg-green-500" onClick={() => setActiveTab('events')} />

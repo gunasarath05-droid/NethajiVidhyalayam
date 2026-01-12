@@ -1,15 +1,11 @@
 from django.contrib import admin
-from .models import HeroVideo, HomeAbout, TeamMember, Facility, Testimonial, AboutPageContent, CoreValue, HistoryPageContent, Milestone
+from .models import HeroVideo, TeamMember, Facility, Testimonial, AboutPageContent, CoreValue, HistoryPageContent, Milestone
 
 @admin.register(HeroVideo)
 class HeroVideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'video_url', 'video_file', 'is_active', 'created_at')
     list_filter = ('is_active',)
     search_fields = ('title',)
-
-@admin.register(HomeAbout)
-class HomeAboutAdmin(admin.ModelAdmin):
-    list_display = ('heading', 'sub_heading', 'is_active', 'updated_at')
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):

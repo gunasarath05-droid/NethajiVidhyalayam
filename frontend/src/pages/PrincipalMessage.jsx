@@ -12,7 +12,7 @@ const PrincipalMessage = () => {
             <section className="relative h-[400px] flex items-center justify-center text-center text-white bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}>
                 <div className="absolute inset-0 bg-primary/80 z-10" />
                 <div className="relative z-20 container mx-auto px-4">
-                    <h1 className="text-4xl md:text-6xl font-bold mb-4">Leadership & Principal's Message</h1>
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">Leadership & Principal's Message</h1>
                     <div className="max-w-3xl mx-auto">
                         <p className="text-xl md:text-2xl font-serif italic text-gray-100 mb-2">
                             “Education is the most powerful weapon which you can use to change the world.”
@@ -55,6 +55,7 @@ const PrincipalMessage = () => {
                                 <img
                                     src={principalImage}
                                     alt="Principal Dr.K. PRAMILA"
+                                    loading="lazy"
                                     className="w-full h-full object-cover"
                                 />
                             </div>

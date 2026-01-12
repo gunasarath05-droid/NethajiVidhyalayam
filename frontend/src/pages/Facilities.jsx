@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
     FaFlask, FaBookOpen, FaDumbbell, FaLaptop, FaBus, FaUtensils, FaHeart, FaShieldAlt,
-    FaCheckCircle, FaAward, FaWifi, FaBolt, FaLeaf, FaCamera, FaStar, FaFire
+    FaCheckCircle, FaAward, FaWifi, FaBolt, FaLeaf, FaCamera, FaStar, FaFire, FaMedkit
 } from 'react-icons/fa';
+import { FaRegIdCard } from "react-icons/fa6";
 import { API_BASE_URL } from '../api/config';
 
 const Facilities = () => {
@@ -52,7 +53,9 @@ const Facilities = () => {
         Zap: <FaBolt />,
         Wifi: <FaWifi />,
         Camera: <FaCamera />,
-        Flame: <FaFire />
+        Flame: <FaFire />,
+        Medikit: <FaMedkit />,
+        IdCard: <FaRegIdCard />
     };
 
     return (
@@ -114,6 +117,7 @@ const Facilities = () => {
                                         <img
                                             src={facility.image ? (facility.image.startsWith('http') ? facility.image : `${API_BASE_URL}${facility.image}`) : "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
                                             alt={facility.title}
+                                            loading="lazy"
                                             className="w-full h-[400px] object-cover transform group-hover:scale-110 transition-transform duration-700"
                                         />
                                     </div>
@@ -147,7 +151,7 @@ const Facilities = () => {
                         <h2 className="text-3xl font-bold text-secondary mb-4">Safety & Security Measures</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">Campus-wide protocols ensuring peace of mind for every parent.</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ">
                         {[
                             {
                                 title: "24/7 CCTV",
@@ -155,9 +159,9 @@ const Facilities = () => {
                                 icon_name: "Camera"
                             },
                             {
-                                title: "Medical Wing",
-                                description: "Full-time nurse and doctor on call",
-                                icon_name: "Heart"
+                                title: "Visitor ID Badges",
+                                description: "Mandatory ID verification for all visitors",
+                                icon_name: "IdCard"
                             },
                             {
                                 title: "Fire Safety",
@@ -165,9 +169,9 @@ const Facilities = () => {
                                 icon_name: "Flame"
                             },
                             {
-                                title: "Secure Entry",
-                                description: "Biometric access and visitor management",
-                                icon_name: "Shield"
+                                title: "First Aid Stations",
+                                description: "Well-equipped first aid kits on every floor",
+                                icon_name: "Medikit"
                             }
                         ].map((item, index) => (
                             <div key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all text-center border-t-4 border-primary">
@@ -182,44 +186,6 @@ const Facilities = () => {
                 </div>
             </section>
 
-            {/* Technology Integration */}
-            <section className="py-20 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="lg:w-1/2">
-                            <img
-                                src={pageContent?.tech_image ? (pageContent.tech_image.startsWith('http') ? pageContent.tech_image : `${API_BASE_URL}${pageContent.tech_image}`) : "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
-                                alt="Technology in Education"
-                                className="rounded-2xl shadow-2xl"
-                            />
-                        </div>
-                        <div className="lg:w-1/2">
-                            <h4 className="text-primary font-bold uppercase tracking-widest mb-2">
-                                Digital Learning
-                            </h4>
-                            <h2 className="text-4xl font-bold text-secondary mb-6">
-                                Technology-Integrated Education
-                            </h2>
-                            <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                                We leverage technology to enhance learning outcomes.
-                            </p>
-                            <div className="space-y-4">
-                                {[
-                                    { text: "Digital Learning Portals", icon_name: "Zap" },
-                                    { text: "High-speed Campus Wifi", icon_name: "Wifi" },
-                                    { text: "Computer Labs with Latest Software", icon_name: "Laptop" }
-                                ].map((item, index) => (
-                                    <div key={index} className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg">
-                                        <div className="text-primary text-3xl font-bold">{iconMap[item.icon_name] || <FaWifi />}</div>
-                                        <span className="font-medium text-gray-700">{item.text}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section className="py-20 bg-secondary text-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
@@ -229,11 +195,11 @@ const Facilities = () => {
                             Committed to sustainability and environmental responsibility.
                         </p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
                         {[
                             {
-                                title: "Solar Power",
-                                description: "40% of campus energy from solar panels"
+                                title: "Plastic-Free Initiative",
+                                description: "Plastic-free practices across campus"
                             },
                             {
                                 title: "Rainwater Harvesting",
