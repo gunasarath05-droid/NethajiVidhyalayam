@@ -27,7 +27,7 @@ wheels/
 
 # Django
 db.sqlite3
-media/
+# media/
 local_settings.py
 .env
 
